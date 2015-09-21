@@ -3,48 +3,225 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <TextView
+        android:text="FTP Details"
+        android:textSize="23dp"
+        android:textColor="#000"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="25dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="50dp"
-        android:layout_centerHorizontal="true"
-        android:text="SET UP"
-        android:id="@+id/setup" />
-    
+        android:layout_toRightOf="@+id/relativeLayout"
+        android:layout_toEndOf="@+id/relativeLayout"
+        android:layout_marginStart="25dp" />
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/relativeLayout">
+
     </RelativeLayout>
 
     <TextView
+        android:text="Server name (IP)"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="FTP Details"
-        android:textSize="22dp"
-        android:layout_below="@+id/setup"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="40dp"
-        android:layout_marginStart="40dp"
-        android:id="@+id/ftp_details" />
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:textColor="#000"
+        android:layout_marginLeft="25dp"
+        android:layout_marginStart="48dp"
+        android:layout_toRightOf="@+id/relativeLayout"
+        android:layout_toEndOf="@+id/relativeLayout"
+        android:layout_marginTop="35dp" />
+
+    <EditText
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:textSize="13dp"
+        android:background="@android:drawable/edit_text"
+        android:layout_marginLeft="25dp"
+        android:layout_marginStart="48dp"
+        android:layout_toRightOf="@+id/relativeLayout"
+        android:layout_marginTop="54dp"
+        android:id="@+id/server_name"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </RelativeLayout>
+
+    <EditText
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:textSize="13dp"
+        android:background="@android:drawable/edit_text"
+        android:id="@+id/editText"
+        android:layout_below="@+id/textView"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView" />
 
     <TextView
+        android:text="User name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="17dp"
-        android:text="Server name (or IP)"
-        android:id="@+id/server_name"
-        android:layout_below="@+id/ftp_details"
-        android:layout_alignLeft="@+id/ftp_details"
-        android:layout_alignStart="@+id/ftp_details" />
+        android:textSize="15dp"
+        android:textColor="#000"
+        android:textStyle="bold"
+        android:layout_below="@+id/server_name"
+        android:layout_alignLeft="@+id/server_name"
+        android:layout_alignStart="@+id/server_name"
+        android:id="@+id/textView" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </RelativeLayout>
+
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:textSize="13dp"
+        android:background="@android:drawable/edit_text"
+        android:id="@+id/editText1"
+        android:layout_below="@+id/textView1"
+        android:layout_alignLeft="@+id/editText"
+        android:layout_alignStart="@+id/editText"
+        android:layout_alignRight="@+id/editText"
+        android:layout_alignEnd="@+id/editText" />
+
+    <TextView
+        android:text="Password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:textColor="#000"
+        android:textStyle="bold"
+        android:id="@+id/textView1"
+        android:layout_below="@+id/editText"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </RelativeLayout>
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/server_name"
-        android:layout_alignLeft="@+id/server_name"
-        android:layout_alignStart="@+id/server_name"
-        android:layout_alignRight="@+id/setup"
-        android:layout_alignEnd="@+id/setup" />
+        android:textSize="13dp"
+        android:background="@android:drawable/edit_text"
+        android:id="@+id/editText2"
+        android:layout_below="@+id/textView2"
+        android:layout_alignLeft="@+id/editText"
+        android:layout_alignStart="@+id/editText"
+        android:layout_alignRight="@+id/editText"
+        android:layout_alignEnd="@+id/editText" />
+
+    <TextView
+        android:text="Password"
+        android:textColor="#000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/editText"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </RelativeLayout>
+
+    <TextView
+        android:text="Splash Screen Logo"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3"
+        android:layout_below="@+id/editText1"
+        android:layout_alignLeft="@+id/editText1"
+        android:layout_alignStart="@+id/editText1" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="13dp"
+        android:background="@android:drawable/edit_text"
+        android:layout_below="@+id/textView3"
+        android:layout_alignRight="@+id/editText1"
+        android:layout_alignEnd="@+id/editText1"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_alignStart="@+id/textView3" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="355dp"
+        android:layout_marginLeft="100dp"/>
+
+    <TextView
+        android:text="Wifi"
+        android:textSize="17dp"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="360dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="358dp"
+        android:layout_marginLeft="252dp"/>
+
+    <TextView
+        android:text="Mobile Data"
+        android:textSize="17dp"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="360dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView4" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="400dp"
+        android:layout_marginLeft="180dp"
+        android:id="@+id/radioButton" />
+
+    <TextView
+        android:text="Save Settings"
+        android:textSize="17dp"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:layout_marginLeft="58dp"
+        android:layout_marginTop="400dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/button_continue"
+        android:text="Continue"
+        android:textColor="#000"
+        android:textStyle="bold"
+        android:layout_width="130dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/radioButton"
+        android:layout_alignRight="@+id/textView4"
+        android:layout_alignEnd="@+id/textView4" />
 
 </RelativeLayout>
