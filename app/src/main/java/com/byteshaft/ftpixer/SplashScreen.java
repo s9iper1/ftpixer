@@ -24,7 +24,8 @@ public class SplashScreen extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.continue_button:
-                System.out.println("continue");
+                Intent mainActivity = new Intent(SplashScreen.this, MainActivity.class);
+                startActivity(mainActivity);
 
                 break;
             case R.id.set_up:
