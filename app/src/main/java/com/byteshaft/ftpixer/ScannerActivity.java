@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,6 +31,8 @@ public class ScannerActivity extends AppCompatActivity {
 
     private boolean barcodeScanned = false;
     private boolean previewing = true;
+
+    String scanResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,10 +116,12 @@ public class ScannerActivity extends AppCompatActivity {
 
                     Log.i("<<<<<<Asset Code>>>>> ",
                             "<<<<Bar Code>>> " + sym.getData());
-                    String scanResult = sym.getData().trim();
+                    scanResult = sym.getData().trim();
 
                     Toast.makeText(ScannerActivity.this, scanResult,
                             Toast.LENGTH_SHORT).show();
+                    MainActivity.scannerEditText.setText("");
+                    MainActivity.scannerEditText.setText(scanResult);
 
                     barcodeScanned = true;
 
