@@ -1,16 +1,23 @@
 package com.byteshaft.ftpixer;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    Button scan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        scan = (Button) findViewById(R.id.scan);
+        scan.setOnClickListener(this);
     }
 
     @Override
@@ -33,5 +40,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.scan:
+                Intent intent = new Intent(MainActivity.this, ScannerActivity.class);
+                startActivity(intent);
+        }
     }
 }
