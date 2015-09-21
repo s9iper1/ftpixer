@@ -7,33 +7,63 @@
 
     <Button
         android:id="@+id/scan_button"
-        android:text="Scan"
+        android:text="Scan Barcode"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
     <EditText
         android:background="@android:drawable/edit_text"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:ems="6"
+        android:id="@+id/editText"
+        android:layout_below="@+id/radioGroup"
+        android:layout_centerHorizontal="true" />
+
+    <RadioGroup
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/radioGroup"
         android:layout_below="@+id/scan_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="44dp" />
+        android:layout_alignLeft="@+id/editText"
+        android:layout_alignStart="@+id/editText">
+
+        <TextView
+            android:textStyle="bold"
+            android:text="Or Enter Job Number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:textStyle="bold"
+            android:text="      Reg No."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RadioGroup>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:text="Take Photos"
-        android:id="@+id/pit_button"
+        android:id="@+id/pic_button"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
     <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
         android:id="@+id/imageView1"
-        android:layout_above="@+id/pit_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="86dp" />
+        android:layout_alignTop="@+id/pic_button"
+        android:layout_alignRight="@+id/editText"
+        android:layout_alignEnd="@+id/editText"
+        android:layout_marginRight="35dp"
+        android:layout_marginEnd="35dp" />
 
 </RelativeLayout>

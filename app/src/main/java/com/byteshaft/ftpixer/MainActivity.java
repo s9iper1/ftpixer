@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mScanButton = (Button) findViewById(R.id.scan_button);
-        mPicButton  = (Button) findViewById(R.id.pit_button);
+        mPicButton  = (Button) findViewById(R.id.pic_button);
         imageView = (ImageView) findViewById(R.id.imageView1);
         mScanButton.setOnClickListener(this);
         mPicButton.setOnClickListener(this);
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(MainActivity.this, ScannerActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.pit_button:
+            case R.id.pic_button:
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
         }
