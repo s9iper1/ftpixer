@@ -15,7 +15,7 @@
         android:background="@android:drawable/edit_text"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/barCodeEditText"
         android:layout_below="@+id/radioGroup"
         android:layout_centerHorizontal="true" />
 
@@ -25,8 +25,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/radioGroup"
         android:layout_below="@+id/scan_button"
-        android:layout_alignLeft="@+id/editText"
-        android:layout_alignStart="@+id/editText">
+        android:layout_alignLeft="@+id/barCodeEditText"
+        android:layout_alignStart="@+id/barCodeEditText">
 
         <TextView
             android:textStyle="bold"
@@ -35,14 +35,16 @@
             android:layout_height="wrap_content" />
         <RadioButton
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:id="@+id/job_no_radio_button"/>
         <TextView
             android:textStyle="bold"
-            android:text="      Reg No."
+            android:text="Reg No."
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <RadioButton
+            android:id="@+id/reg_no_radio_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -61,8 +63,8 @@
         android:layout_height="10dp"
         android:id="@+id/imageView1"
         android:layout_alignTop="@+id/pic_button"
-        android:layout_alignRight="@+id/editText"
-        android:layout_alignEnd="@+id/editText"
+        android:layout_alignRight="@+id/barCodeEditText"
+        android:layout_alignEnd="@+id/barCodeEditText"
         android:layout_marginRight="35dp"
         android:layout_marginEnd="35dp" />
 

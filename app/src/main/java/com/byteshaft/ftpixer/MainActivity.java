@@ -2,13 +2,19 @@ package com.byteshaft.ftpixer;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -16,16 +22,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mPicButton;
     private ImageView imageView;
     private static final int CAMERA_REQUEST = 1888;
+    ScannerActivity scannerActivity;
+    public static EditText scannerEditText;
+    static RadioButton jobNumberRadioButton;
+    static RadioButton regNoRadioButton;
+    RadioGroup radioGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        scannerActivity = new ScannerActivity();
+        scannerEditText = (EditText) findViewById(R.id.barCodeEditText);
+        jobNumberRadioButton = (RadioButton) findViewById(R.id.job_no_radio_button);
+        regNoRadioButton = (RadioButton) findViewById(R.id.reg_no_radio_button);
+        radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         mScanButton = (Button) findViewById(R.id.scan_button);
         mPicButton  = (Button) findViewById(R.id.pic_button);
         imageView = (ImageView) findViewById(R.id.imageView1);
         mScanButton.setOnClickListener(this);
         mPicButton.setOnClickListener(this);
+        scannerEditText.setFilters(new InputFilter[]
+                {new InputFilter.LengthFilter(6)});
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (jobNumberRadioButton.isChecked()) {
+                    scannerEditText.setText("");
+                    int maxLength = 6;
+                       scannerEditText.setFilters(new InputFilter[]
+                                {new InputFilter.LengthFilter(maxLength)});
+                    System.out.println("Job Number Button Checked");
+                } else if (regNoRadioButton.isChecked()) {
+                    scannerEditText.setText("");
+                    int maxLength = 7;
+                    scannerEditText.setFilters(new InputFilter[]
+                            {new InputFilter.LengthFilter(maxLength)});
+                    System.out.println("Registration Button Checked");
+                }
+            }
+        });
     }
 
     @Override
