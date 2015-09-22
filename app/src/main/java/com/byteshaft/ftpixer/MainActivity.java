@@ -22,7 +22,8 @@ import android.widget.RadioGroup;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     private Button mScanButton;
     private Button mPicButton;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     static RadioButton jobNumberRadioButton;
     static RadioButton regNoRadioButton;
     RadioGroup radioGroup;
+    RadioGroup radioGroupTwo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +42,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         scannerActivity = new ScannerActivity();
         scannerEditText = (EditText) findViewById(R.id.barCodeEditText);
-        scannerEditText.clearFocus();
+        scannerEditText.setFocusable(false);
         jobNumberRadioButton = (RadioButton) findViewById(R.id.job_no_radio_button);
         regNoRadioButton = (RadioButton) findViewById(R.id.reg_no_radio_button);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        radioGroupTwo = (RadioGroup) findViewById(R.id.radio_group_one);
         mScanButton = (Button) findViewById(R.id.scan_button);
         mPicButton  = (Button) findViewById(R.id.pic_button);
         imageView = (ImageView) findViewById(R.id.imageView1);
@@ -55,12 +58,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (jobNumberRadioButton.isChecked()) {
+                    scannerEditText.setFocusable(true);
+                    scannerEditText.setSelected(true);
                     scannerEditText.setText("");
                     int maxLength = 6;
                        scannerEditText.setFilters(new InputFilter[]
                                 {new InputFilter.LengthFilter(maxLength)});
                     System.out.println("Job Number Button Checked");
                 } else if (regNoRadioButton.isChecked()) {
+                    scannerEditText.setFocusable(true);
+                    scannerEditText.setSelected(true);
                     scannerEditText.setText("");
                     int maxLength = 7;
                     scannerEditText.setFilters(new InputFilter[]
@@ -119,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -131,5 +139,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cursor.moveToFirst();
         int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
         return cursor.getString(idx);
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        switch (checkedId) {
+            case R.id.radio_workshop_strip:
+                break;
+
+            case R.id.radio_workshop_panel:
+                break;
+
+            case R.id.radio_workshop_paint:
+                break;
+
+            case R.id.radio_workshop_refit:
+                break;
+
+            case R.id.radio_vda_claim:
+                break;
+
+            case R.id.radio_vda_non_claim:
+                break;
+
+            case R.id.radio_vda_extra_work:
+                break;
+
+            case R.id.radio_pre_inspection_claim_related:
+                break;
+
+            case R.id.radio_pre_inspection_non_claim:
+                break;
+
+            case R.id.radio_mobile_claim:
+                break;
+
+            case R.id.radio_mobile_non_claim:
+                break;
+
+            case R.id.radio_mobile_extra_work:
+                break;
+        }
     }
 }

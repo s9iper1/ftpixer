@@ -38,7 +38,6 @@
             android:layout_height="wrap_content"
             android:text="Reg No."/>
     </RadioGroup>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -63,22 +62,26 @@
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Strip">
+            android:text="Strip"
+            android:id="@+id/radio_workshop_strip">
         </RadioButton>
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Panel">
+            android:text="Panel"
+            android:id="@+id/radio_workshop_panel">
         </RadioButton>
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Paint">
+            android:text="Paint"
+            android:id="@+id/radio_workshop_paint">
         </RadioButton>
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Refit">
+            android:text="Refit"
+            android:id="@+id/radio_workshop_refit">
         </RadioButton>
             <TextView
                 android:layout_width="wrap_content"
@@ -90,17 +93,20 @@
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Claim">
+                android:text="Claim"
+                android:id="@+id/radio_vda_claim">
             </RadioButton>
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Non-Claim">
+                android:text="Non-Claim"
+                android:id="@+id/radio_vda_non_claim">
             </RadioButton>
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Extra Work">
+                android:text="Extra Work"
+                android:id="@+id/radio_vda_extra_work">
             </RadioButton>
             <TextView
                 android:layout_width="wrap_content"
@@ -112,12 +118,14 @@
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Claim Related">
+                android:text="Claim Related"
+                android:id="@+id/radio_pre_inspection_claim_related">
             </RadioButton>
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Non-Claim">
+                android:text="Non-Claim"
+                android:id="@+id/radio_pre_inspection_non_claim">
             </RadioButton>
             <TextView
                 android:layout_width="wrap_content"
@@ -129,17 +137,20 @@
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Claim">
+                android:text="Claim"
+                android:id="@+id/radio_mobile_claim">
             </RadioButton>
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Non-Claim">
+                android:text="Non-Claim"
+                android:id="@+id/radio_mobile_non_claim">
             </RadioButton>
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Extra Work">
+                android:text="Extra Work"
+                android:id="@+id/radio_mobile_extra_work">
             </RadioButton>
         </RadioGroup>
         </LinearLayout>
@@ -150,7 +161,8 @@
         android:text="Take Photos"
         android:id="@+id/pic_button"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
     <ImageView
         android:layout_width="10dp"
         android:layout_height="10dp"
