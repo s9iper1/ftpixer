@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         scannerActivity = new ScannerActivity();
         scannerEditText = (EditText) findViewById(R.id.barCodeEditText);
+        scannerEditText.clearFocus();
         jobNumberRadioButton = (RadioButton) findViewById(R.id.job_no_radio_button);
         regNoRadioButton = (RadioButton) findViewById(R.id.reg_no_radio_button);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
