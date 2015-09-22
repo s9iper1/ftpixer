@@ -1,5 +1,6 @@
 package com.byteshaft.ftpixer;
 
+import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
 import android.os.Handler;
@@ -21,7 +22,7 @@ import net.sourceforge.zbar.SymbolSet;
 import android.support.v7.app.AppCompatActivity;
 
 
-public class ScannerActivity extends AppCompatActivity {
+public class ScannerActivity extends Activity {
 
     private Camera mCamera;
     private CameraPreview mPreview;
@@ -120,6 +121,7 @@ public class ScannerActivity extends AppCompatActivity {
 
                     Toast.makeText(ScannerActivity.this, scanResult,
                             Toast.LENGTH_SHORT).show();
+                    ScannerActivity.this.finish();
                     MainActivity.scannerEditText.setText("");
                     MainActivity.scannerEditText.setText(scanResult);
 
