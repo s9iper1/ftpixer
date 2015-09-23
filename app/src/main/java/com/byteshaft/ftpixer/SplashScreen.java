@@ -13,9 +13,9 @@ public class SplashScreen extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
-        Button continu = (Button)findViewById(R.id.continue_button);
+        Button continueButton = (Button)findViewById(R.id.continue_button);
         Button setup = (Button)findViewById(R.id.set_up);
-        continu.setOnClickListener(this);
+        continueButton.setOnClickListener(this);
         setup.setOnClickListener(this);
 
     }
