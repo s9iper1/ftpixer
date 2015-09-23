@@ -17,32 +17,33 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button mScanButton;
     private Button mPicButton;
-    private ImageView imageView;
+    private Button mButtonCount;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-    ScannerActivity scannerActivity;
+    private ScannerActivity scannerActivity;
     public static EditText scannerEditText;
-    static RadioButton jobNumberRadioButton;
-    static RadioButton regNoRadioButton;
+    private static RadioButton jobNumberRadioButton;
+    private static RadioButton regNoRadioButton;
     private RadioGroup radioGroup;
     private static Uri suriSavedImage;
+    private ArrayList<String> arrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0453A2")));
         setContentView(R.layout.activity_main);
+        arrayList = new ArrayList<>();
         scannerActivity = new ScannerActivity();
         scannerEditText = (EditText) findViewById(R.id.barCodeEditText);
         scannerEditText.clearFocus();
@@ -51,7 +52,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         mScanButton = (Button) findViewById(R.id.scan_button);
         mPicButton  = (Button) findViewById(R.id.pic_button);
-        imageView = (ImageView) findViewById(R.id.imageView1);
+        mButtonCount = (Button) findViewById(R.id.buttonCount);
+        if (arrayList.size() == 0) {
+            mButtonCount.setVisibility(View.INVISIBLE);
+        }
+        mButtonCount.setOnClickListener(this);
         mScanButton.setOnClickListener(this);
         mPicButton.setOnClickListener(this);
         scannerEditText.setFilters(new InputFilter[]
@@ -113,6 +118,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 suriSavedImage = Uri.fromFile(image);
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, suriSavedImage);
                 startActivityForResult(cameraIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+                break;
+            case R.id.buttonCount:
+                //donot remove
+                break;
         }
     }
 
@@ -130,15 +139,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             Bitmap photo;
-            try {
-                System.out.println(suriSavedImage);
-                photo = MediaStore.Images.Media.getBitmap(getContentResolver(), suriSavedImage);
-                photo = crupAndScale(photo, 300);
-                imageView.setImageBitmap(photo);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+                File newImage = new File(String.valueOf(suriSavedImage));
+                arrayList.add(newImage.getAbsolutePath());
+//                photo = MediaStore.Images.Media.getBitmap(getContentResolver(), suriSavedImage);
+//                photo = crupAndScale(photo, 300);
+            mButtonCount.setVisibility(View.VISIBLE);
+            mButtonCount.setText(String.valueOf(arrayList.size()));
         }
     }
 
