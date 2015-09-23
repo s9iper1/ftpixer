@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +25,6 @@ import android.widget.RadioGroup;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         scannerActivity = new ScannerActivity();
         scannerEditText = (EditText) findViewById(R.id.barCodeEditText);
-        scannerEditText.setFocusable(false);
         jobNumberRadioButton = (RadioButton) findViewById(R.id.job_no_radio_button);
         regNoRadioButton = (RadioButton) findViewById(R.id.reg_no_radio_button);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
@@ -101,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -145,7 +143,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -166,8 +163,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
+        mPicButton.setVisibility(View.VISIBLE);
         switch (checkedId) {
             case R.id.radio_workshop_strip:
+                Log.i("RADIO", "Strip selected");
                 break;
 
             case R.id.radio_workshop_panel:
