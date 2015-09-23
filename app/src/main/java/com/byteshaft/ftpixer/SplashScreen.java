@@ -9,6 +9,8 @@ import android.widget.Button;
 
 public class SplashScreen extends AppCompatActivity implements View.OnClickListener {
 
+    static boolean isExitButtonPressed = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,12 +29,15 @@ public class SplashScreen extends AppCompatActivity implements View.OnClickListe
                 Intent mainActivity = new Intent(SplashScreen.this, MainActivity.class);
                 startActivity(mainActivity);
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                finish();
                 break;
             case R.id.set_up:
                 System.out.println("set");
                 Intent intent = new Intent(this, SetUpDetails.class);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                finish();
+                isExitButtonPressed = false;
                 break;
         }
     }
