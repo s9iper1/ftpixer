@@ -4,16 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -21,6 +23,7 @@ import android.widget.RadioGroup;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
@@ -28,17 +31,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mScanButton;
     private Button mPicButton;
     private ImageView imageView;
-    private static final int CAMERA_REQUEST = 1888;
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     ScannerActivity scannerActivity;
     public static EditText scannerEditText;
     static RadioButton jobNumberRadioButton;
     static RadioButton regNoRadioButton;
-    RadioGroup radioGroup;
-    RadioGroup radioGroupTwo;
+    private RadioGroup radioGroup;
+    private RadioGroup radioGroupTwo;
+    private static Uri suriSavedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0453A2")));
         setContentView(R.layout.activity_main);
         scannerActivity = new ScannerActivity();
         scannerEditText = (EditText) findViewById(R.id.barCodeEditText);
@@ -109,20 +114,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.pic_button:
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                File imagesFolder = new File(Environment.getExternalStorageDirectory(), "/DCIM/Camera/");
+                imagesFolder.mkdirs();
+                File image = new File(imagesFolder, "value" + ".jpg");
+                suriSavedImage = Uri.fromFile(image);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, suriSavedImage);
+                startActivityForResult(cameraIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
+    }
+
+    public static Bitmap crupAndScale (Bitmap source,int scale){
+        int factor = source.getHeight() <= source.getWidth() ? source.getHeight(): source.getWidth();
+        int longer = source.getHeight() >= source.getWidth() ? source.getHeight(): source.getWidth();
+        int x = source.getHeight() >= source.getWidth() ?0:(longer-factor)/2;
+        int y = source.getHeight() <= source.getWidth() ?0:(longer-factor)/2;
+        source = Bitmap.createBitmap(source, x, y, factor, factor);
+        source = Bitmap.createScaledBitmap(source, scale, scale, false);
+        return source;
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            imageView.setImageBitmap(photo);
-            Uri tempUri = getImageUri(getApplicationContext(), photo);
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            Bitmap photo;
+            try {
+                System.out.println(suriSavedImage);
+                photo = MediaStore.Images.Media.getBitmap(getContentResolver(), suriSavedImage);
+                photo = crupAndScale(photo, 300);
+                imageView.setImageBitmap(photo);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-            // CALL THIS METHOD TO GET THE ACTUAL PATH
-            File finalFile = new File(getRealPathFromURI(tempUri));
-            System.out.println(finalFile);
         }
     }
 
