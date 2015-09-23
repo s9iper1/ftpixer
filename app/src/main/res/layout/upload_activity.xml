@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#FEFEFE">
+
+
+    <ImageView
+        android:layout_width="250dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/splash"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/start_again"
@@ -9,11 +20,9 @@
         android:text="Start Again"
         android:background="#0453A2"
         android:textColor="@android:color/white"
-        android:layout_alignTop="@+id/exit_button"
-        android:layout_toLeftOf="@+id/exit_button"
-        android:layout_toStartOf="@+id/exit_button"
-        android:layout_marginRight="48dp"
-        android:layout_marginEnd="48dp" />
+        android:layout_marginBottom="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="40dp"/>
 
     <Button
         android:id="@+id/exit_button"
@@ -22,10 +31,10 @@
         android:background="#0453A2"
         android:textColor="@android:color/white"
         android:text="Exit"
-        android:layout_alignParentBottom="true"
+        android:layout_marginRight="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="60dp"
+        android:layout_alignTop="@+id/start_again"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="44dp"
-        android:layout_marginEnd="44dp"
-        android:layout_marginBottom="115dp" />
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
