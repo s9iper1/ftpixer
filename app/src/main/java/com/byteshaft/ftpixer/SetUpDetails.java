@@ -1,6 +1,7 @@
 package com.byteshaft.ftpixer;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -63,8 +64,6 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_continue:
-                SharedPreferences preferences = AppGlobals.getPreferenceManager();
-                System.out.println("clicked");
 
                 if ((mServerName.getText().toString().trim()).isEmpty() ||
                         (mPort.getText().toString().trim()).isEmpty() ||
@@ -72,22 +71,21 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
                         (mUsername.getText().toString().trim()).isEmpty()) {
                     Toast.makeText(getApplicationContext(), "All fields must be filled",
                             Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(SetUpDetails.this, MainActivity.class);
+                    startActivity(intent);
+                }
 
-                    System.out.println("second part");
-                    if (mSaveServerSetting.isChecked()) {
-                        preferences.edit().putString("server", mServerName.toString().trim()).apply();
-                        preferences.edit().putString("port", mPort.toString().trim()).apply();
-                        preferences.edit().putString("password", mPassword.toString().trim()).apply();
-                        preferences.edit().putString("username", mUsername.toString().trim()).apply();
-
-                    } else {
-                        
-                    }
-
+                if (mSaveServerSetting.isChecked()) {
+                    SharedPreferences preferences = AppGlobals.getPreferenceManager();
+                    preferences.edit().putString("server", mServerName.toString().trim()).apply();
+                    preferences.edit().putString("port", mPort.toString().trim()).apply();
+                    preferences.edit().putString("password", mPassword.toString().trim()).apply();
+                    preferences.edit().putString("username", mUsername.toString().trim()).apply();
                 }
                 break;
         }
-    }
+}
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
