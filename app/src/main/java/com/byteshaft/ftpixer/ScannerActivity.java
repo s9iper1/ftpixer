@@ -124,6 +124,7 @@ public class ScannerActivity extends Activity {
                     ScannerActivity.this.finish();
                     MainActivity.scannerEditText.setText("");
                     MainActivity.scannerEditText.setText(scanResult);
+                    releaseCamera();
 
                     barcodeScanned = true;
 
