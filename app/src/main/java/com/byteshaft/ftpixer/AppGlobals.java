@@ -8,6 +8,10 @@ import android.preference.PreferenceManager;
 
 public class AppGlobals  extends Application {
     private static SharedPreferences sPreferences;
+    public String sServerIP;
+    public String sPortNumber;
+    public String sUsername;
+    public String sPassword;
 
     public static Context sContext;
     @Override

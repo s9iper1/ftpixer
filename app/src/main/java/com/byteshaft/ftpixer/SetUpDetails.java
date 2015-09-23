@@ -29,12 +29,16 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
     private EditText mPassword;
     private Button mContinueButton;
     private CheckBox mSaveServerSetting;
+    SharedPreferences preferences;
+    AppGlobals mAppGlobals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0453A2")));
         setContentView(R.layout.setup);
+        mAppGlobals = new AppGlobals();
+        preferences = AppGlobals.getPreferenceManager();
         mSaveServerSetting = (CheckBox) findViewById(R.id.save_settings);
         mContinueButton = (Button) findViewById(R.id.button_continue);
         mServerName = (EditText) findViewById(R.id.server_name);
@@ -77,11 +81,15 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
                 }
 
                 if (mSaveServerSetting.isChecked()) {
-                    SharedPreferences preferences = AppGlobals.getPreferenceManager();
                     preferences.edit().putString("server", mServerName.toString().trim()).apply();
                     preferences.edit().putString("port", mPort.toString().trim()).apply();
-                    preferences.edit().putString("password", mPassword.toString().trim()).apply();
                     preferences.edit().putString("username", mUsername.toString().trim()).apply();
+                    preferences.edit().putString("password", mPassword.toString().trim()).apply();
+                } else {
+                    mAppGlobals.sServerIP = mServerName.getText().toString();
+                    mAppGlobals.sPortNumber = mPort.getText().toString();
+                    mAppGlobals.sUsername = mUsername.getText().toString();
+                    mAppGlobals.sPassword = mPassword.getText().toString();
                 }
                 break;
         }
