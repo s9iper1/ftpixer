@@ -1,5 +1,6 @@
 package com.byteshaft.ftpixer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -41,10 +42,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<String> arrayList;
     private static String sImageNameAccordingToRadioButton;
     private static String sTextFromScannerEditText;
+    public static Activity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mainActivity = this;
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0453A2")));
         setContentView(R.layout.activity_main);
         arrayList = new ArrayList<>();
