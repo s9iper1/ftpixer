@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +25,6 @@ import android.widget.RadioGroup;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RadioGroup radioGroupTwo;
     private static Uri suriSavedImage;
     private static String sImageNameAccordingToRadioButton;
+    private static String sTextFromScannerEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +66,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (jobNumberRadioButton.isChecked()) {
+                    scannerEditText.setFocusableInTouchMode(true);
                     scannerEditText.setFocusable(true);
-                    scannerEditText.setSelected(true);
                     scannerEditText.setText("");
                     int maxLength = 6;
                        scannerEditText.setFilters(new InputFilter[]
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     System.out.println("Job Number Button Checked");
                 } else if (regNoRadioButton.isChecked()) {
                     scannerEditText.setFocusable(true);
-                    scannerEditText.setSelected(true);
+                    scannerEditText.setFocusableInTouchMode(true);
                     scannerEditText.setText("");
                     int maxLength = 7;
                     scannerEditText.setFilters(new InputFilter[]
@@ -103,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -118,7 +118,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 File imagesFolder = new File(Environment.getExternalStorageDirectory(), "/DCIM/Camera/");
                 imagesFolder.mkdirs();
-                File image = new File(imagesFolder, sImageNameAccordingToRadioButton + ""   + ".jpg");
+                sTextFromScannerEditText = scannerEditText.getText().toString();
+                File image = new File(imagesFolder, sImageNameAccordingToRadioButton + "_"
+                        + sTextFromScannerEditText + ".jpg");
                 suriSavedImage = Uri.fromFile(image);
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, suriSavedImage);
                 startActivityForResult(cameraIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
@@ -147,7 +149,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -173,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.radio_workshop_strip:
                 sImageNameAccordingToRadioButton = "WST";
                 System.out.println(sImageNameAccordingToRadioButton);
+                Log.i("RADIO", "Strip selected");
                 break;
 
             case R.id.radio_workshop_panel:
