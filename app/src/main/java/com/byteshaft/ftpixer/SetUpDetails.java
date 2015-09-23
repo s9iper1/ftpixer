@@ -16,12 +16,10 @@ public class SetUpDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setup);
-
-
-        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
-        mWifi = (RadioButton) findViewById(R.id.wifi_button);
-        mMobileData = (RadioButton) findViewById(R.id.mobile_data_button);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        RadioGroup dataUsageGroup = (RadioGroup) findViewById(R.id.data_uage_radiogroup);
+        mWifi = (RadioButton) findViewById(R.id.wifi_radio_button);
+        mMobileData = (RadioButton) findViewById(R.id.mobile_data_radio_button);
+        dataUsageGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (mWifi.isChecked() && isWifiConnected()) {
