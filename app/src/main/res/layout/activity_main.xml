@@ -43,7 +43,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/barCodeEditText"
         android:layout_margin="5dp"
-        android:layout_above="@+id/pic_button">
+        android:layout_above="@+id/pic_button"
+        android:id="@+id/scrollView">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
@@ -156,20 +157,20 @@
         </LinearLayout>
     </ScrollView>
     <Button
-        android:layout_width="220dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="Take Photos"
         android:id="@+id/pic_button"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:textColor="#0453A2"
+        android:id="@+id/buttonCount"
+        android:layout_below="@+id/scrollView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
         android:visibility="gone"/>
-    <ImageView
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:id="@+id/imageView1"
-        android:layout_alignTop="@+id/pic_button"
-        android:layout_alignRight="@+id/barCodeEditText"
-        android:layout_alignEnd="@+id/barCodeEditText"
-        android:layout_marginRight="35dp"
-        android:layout_marginEnd="35dp"/>
 </RelativeLayout>

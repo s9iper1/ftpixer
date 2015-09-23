@@ -26,12 +26,13 @@ public class SplashScreen extends AppCompatActivity implements View.OnClickListe
             case R.id.continue_button:
                 Intent mainActivity = new Intent(SplashScreen.this, MainActivity.class);
                 startActivity(mainActivity);
-
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 break;
             case R.id.set_up:
                 System.out.println("set");
                 Intent intent = new Intent(this, SetUpDetails.class);
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 break;
         }
     }
