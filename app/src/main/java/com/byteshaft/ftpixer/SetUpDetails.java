@@ -50,6 +50,19 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
         mMobileData = (RadioButton) findViewById(R.id.mobile_data_radio_button);
         mContinueButton.setOnClickListener(this);
         mSaveServerSetting.setOnCheckedChangeListener(this);
+        dataUsageGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.wifi_radio_button && isWifiConnected()) {
+                    System.out.println("wifi network");
+                }
+
+                if (checkedId == R.id.data_uage_radiogroup && isMobileDataConnected()) {
+                    System.out.println("mobile network");
+
+                }
+            }
+        });
     }
 
     private boolean isWifiConnected() {
