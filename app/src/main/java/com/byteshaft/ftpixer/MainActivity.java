@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     private Button mScanButton;
     private Button mPicButton;
@@ -35,8 +36,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static RadioButton jobNumberRadioButton;
     private static RadioButton regNoRadioButton;
     private RadioGroup radioGroup;
+    private RadioGroup radioGroupTwo;
     private static Uri suriSavedImage;
     private ArrayList<String> arrayList;
+    private static String sImageNameAccordingToRadioButton;
+    private static String sTextFromScannerEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +50,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         arrayList = new ArrayList<>();
         scannerActivity = new ScannerActivity();
         scannerEditText = (EditText) findViewById(R.id.barCodeEditText);
-        scannerEditText.clearFocus();
+        scannerEditText.setFocusable(false);
         jobNumberRadioButton = (RadioButton) findViewById(R.id.job_no_radio_button);
         regNoRadioButton = (RadioButton) findViewById(R.id.reg_no_radio_button);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        radioGroupTwo = (RadioGroup) findViewById(R.id.radio_group_one);
+        radioGroupTwo.setOnCheckedChangeListener(this);
         mScanButton = (Button) findViewById(R.id.scan_button);
         mPicButton  = (Button) findViewById(R.id.pic_button);
         mButtonCount = (Button) findViewById(R.id.buttonCount);
@@ -65,12 +71,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (jobNumberRadioButton.isChecked()) {
+                    scannerEditText.setFocusableInTouchMode(true);
+                    scannerEditText.setFocusable(true);
                     scannerEditText.setText("");
                     int maxLength = 6;
                        scannerEditText.setFilters(new InputFilter[]
                                 {new InputFilter.LengthFilter(maxLength)});
                     System.out.println("Job Number Button Checked");
                 } else if (regNoRadioButton.isChecked()) {
+                    scannerEditText.setFocusable(true);
+                    scannerEditText.setFocusableInTouchMode(true);
                     scannerEditText.setText("");
                     int maxLength = 7;
                     scannerEditText.setFilters(new InputFilter[]
@@ -99,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -114,7 +123,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 File imagesFolder = new File(Environment.getExternalStorageDirectory(), "/DCIM/Camera/");
                 imagesFolder.mkdirs();
-                File image = new File(imagesFolder, "value" + ".jpg");
+                sTextFromScannerEditText = scannerEditText.getText().toString();
+                File image = new File(imagesFolder, sImageNameAccordingToRadioButton + "_"
+                        + sTextFromScannerEditText + ".jpg");
                 suriSavedImage = Uri.fromFile(image);
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, suriSavedImage);
                 startActivityForResult(cameraIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
@@ -148,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -160,5 +172,72 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cursor.moveToFirst();
         int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
         return cursor.getString(idx);
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        mPicButton.setVisibility(View.VISIBLE);
+        switch (checkedId) {
+            case R.id.radio_workshop_strip:
+                sImageNameAccordingToRadioButton = "WST";
+                System.out.println(sImageNameAccordingToRadioButton);
+                Log.i("RADIO", "Strip selected");
+                break;
+
+            case R.id.radio_workshop_panel:
+                sImageNameAccordingToRadioButton = "WPN";
+                System.out.println(sImageNameAccordingToRadioButton);
+                break;
+
+            case R.id.radio_workshop_paint:
+                sImageNameAccordingToRadioButton = "WPI";
+                System.out.println(sImageNameAccordingToRadioButton);
+                break;
+
+            case R.id.radio_workshop_refit:
+                sImageNameAccordingToRadioButton = "WRE";
+                System.out.println(sImageNameAccordingToRadioButton);
+                break;
+
+            case R.id.radio_vda_claim:
+                sImageNameAccordingToRadioButton = "VCL";
+                System.out.println(sImageNameAccordingToRadioButton);
+                break;
+
+            case R.id.radio_vda_non_claim:
+                sImageNameAccordingToRadioButton = "VNO";
+                System.out.println(sImageNameAccordingToRadioButton);
+                break;
+
+            case R.id.radio_vda_extra_work:
+                sImageNameAccordingToRadioButton = "VEX";
+                System.out.println(sImageNameAccordingToRadioButton);
+                break;
+
+            case R.id.radio_pre_inspection_claim_related:
+                sImageNameAccordingToRadioButton = "PCL";
+                System.out.println(sImageNameAccordingToRadioButton);
+                break;
+
+            case R.id.radio_pre_inspection_non_claim:
+                sImageNameAccordingToRadioButton = "PNO";
+                System.out.println(sImageNameAccordingToRadioButton);
+                break;
+
+            case R.id.radio_mobile_claim:
+                sImageNameAccordingToRadioButton = "MCL";
+                System.out.println(sImageNameAccordingToRadioButton);
+                break;
+
+            case R.id.radio_mobile_non_claim:
+                sImageNameAccordingToRadioButton = "MNO";
+                System.out.println(sImageNameAccordingToRadioButton);
+                break;
+
+            case R.id.radio_mobile_extra_work:
+                sImageNameAccordingToRadioButton = "MEX";
+                System.out.println(sImageNameAccordingToRadioButton);
+                break;
+        }
     }
 }

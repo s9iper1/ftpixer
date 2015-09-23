@@ -35,6 +35,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:name=".ScannerActivity"
             android:label="@string/title_activity_scanner" >
         </activity>
