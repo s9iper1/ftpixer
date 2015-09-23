@@ -106,7 +106,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_done) {
+            Intent intent = new Intent(this, UploadActivity.class);
+            startActivity(intent);
+            System.out.println("done");
             return true;
         }
         return super.onOptionsItemSelected(item);
