@@ -1,10 +1,7 @@
 package com.byteshaft.ftpixer;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -22,7 +19,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -38,11 +34,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static RadioButton regNoRadioButton;
     private RadioGroup radioGroup;
     private RadioGroup radioGroupTwo;
-    private static Uri suriSavedImage;
+    private static File sFileSavedImage;
     private ArrayList<String> arrayList;
     private static String sImageNameAccordingToRadioButton;
     private static String sTextFromScannerEditText;
     public static Activity mainActivity;
+    private int mPreviousCounterValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (arrayList.size() == 0) {
             mButtonCount.setVisibility(View.INVISIBLE);
         }
-        mButtonCount.setOnClickListener(this);
         mScanButton.setOnClickListener(this);
         mPicButton.setOnClickListener(this);
         scannerEditText.setFilters(new InputFilter[]
@@ -78,8 +74,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     scannerEditText.setFocusable(true);
                     scannerEditText.setText("");
                     int maxLength = 6;
-                       scannerEditText.setFilters(new InputFilter[]
-                                {new InputFilter.LengthFilter(maxLength)});
+                    scannerEditText.setFilters(new InputFilter[]
+                            {new InputFilter.LengthFilter(maxLength)});
                     System.out.println("Job Number Button Checked");
                 } else if (regNoRadioButton.isChecked()) {
                     scannerEditText.setFocusable(true);
@@ -92,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         });
+        Helpers.saveCounterValue(0);
     }
 
     @Override
@@ -111,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_done) {
             Intent intent = new Intent(this, UploadActivity.class);
+            intent.putExtra("images", arrayList);
             startActivity(intent);
             System.out.println("done");
             return true;
@@ -129,55 +127,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 File imagesFolder = new File(Environment.getExternalStorageDirectory(), "/DCIM/Camera/");
                 imagesFolder.mkdirs();
+                mPreviousCounterValue = 0;
+                mPreviousCounterValue = Helpers.getPreviousCounterValue();
                 sTextFromScannerEditText = scannerEditText.getText().toString();
                 File image = new File(imagesFolder, sImageNameAccordingToRadioButton + "_"
-                        + sTextFromScannerEditText + ".jpg");
-                suriSavedImage = Uri.fromFile(image);
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, suriSavedImage);
+                        + sTextFromScannerEditText +  "_" +
+                        getPreviousValueAndAddOne(mPreviousCounterValue) + ".jpg");
+                Uri uriSavedImage = Uri.fromFile(image);
+                sFileSavedImage = image;
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
                 startActivityForResult(cameraIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
                 break;
-            case R.id.buttonCount:
-                //donot remove
-                break;
         }
-    }
-
-    public static Bitmap crupAndScale (Bitmap source,int scale){
-        int factor = source.getHeight() <= source.getWidth() ? source.getHeight(): source.getWidth();
-        int longer = source.getHeight() >= source.getWidth() ? source.getHeight(): source.getWidth();
-        int x = source.getHeight() >= source.getWidth() ?0:(longer-factor)/2;
-        int y = source.getHeight() <= source.getWidth() ?0:(longer-factor)/2;
-        source = Bitmap.createBitmap(source, x, y, factor, factor);
-        source = Bitmap.createScaledBitmap(source, scale, scale, false);
-        return source;
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println(resultCode);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Bitmap photo;
-                File newImage = new File(String.valueOf(suriSavedImage));
-                arrayList.add(newImage.getAbsolutePath());
-//                photo = MediaStore.Images.Media.getBitmap(getContentResolver(), suriSavedImage);
-//                photo = crupAndScale(photo, 300);
-            mButtonCount.setVisibility(View.VISIBLE);
-            mButtonCount.setText(String.valueOf(arrayList.size()));
+                arrayList.add(sFileSavedImage.getAbsolutePath());
+            if (arrayList.size() > 0) {
+                Helpers.saveCounterValue(mPreviousCounterValue + 1);
+                mButtonCount.setVisibility(View.VISIBLE);
+                mButtonCount.setText(String.valueOf(arrayList.size()));
+            }
         }
-    }
-
-
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
-
-    public String getRealPathFromURI(Uri uri) {
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-        return cursor.getString(idx);
     }
 
     @Override
@@ -244,6 +218,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 sImageNameAccordingToRadioButton = "MEX";
                 System.out.println(sImageNameAccordingToRadioButton);
                 break;
+        }
+    }
+
+    private String getPreviousValueAndAddOne(int previousValue) {
+        switch (String.valueOf(previousValue).length()) {
+            case 1:
+                return "00" + (previousValue + 1);
+            case 2:
+                return "0" + (previousValue + 1);
+            case 3:
+                return String.valueOf(previousValue + 1);
+            default:
+                return "00" + (previousValue + 1);
         }
     }
 }
