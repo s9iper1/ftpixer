@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static String sTextFromScannerEditText;
     public static Activity mainActivity;
     private int mPreviousCounterValue;
+    private Menu actionBarMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +55,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         scannerActivity = new ScannerActivity();
         scannerEditText = (EditText) findViewById(R.id.barCodeEditText);
         scannerEditText.setFocusable(false);
+        scannerEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String str = s.toString();
+                String editText = scannerEditText.getText().toString().trim();
+                if (!editText.isEmpty()) {
+                    mPicButton.setVisibility(View.VISIBLE);
+                }else if (editText.isEmpty() || editText.length() == 0 || editText.equals("")) {
+                    mPicButton.setVisibility(View.INVISIBLE);
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         jobNumberRadioButton = (RadioButton) findViewById(R.id.job_no_radio_button);
         regNoRadioButton = (RadioButton) findViewById(R.id.reg_no_radio_button);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         radioGroupTwo = (RadioGroup) findViewById(R.id.radio_group_one);
         radioGroupTwo.setOnCheckedChangeListener(this);
+        radioGroupTwo.setEnabled(false);
         mScanButton = (Button) findViewById(R.id.scan_button);
         mPicButton  = (Button) findViewById(R.id.pic_button);
         mButtonCount = (Button) findViewById(R.id.buttonCount);
@@ -92,9 +120,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        actionBarMenu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        scannerEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String str = s.toString();
+                String editText = scannerEditText.getText().toString().trim();
+                if(str.length() > 0 && str.startsWith(" ")){
+                    Log.v("","Cannot begin with space");
+                    scannerEditText.setText("");
+                } else if (editText.isEmpty() || editText.length() == 0 || editText.equals("")) {
+                    menu.findItem(R.id.action_done).setVisible(false);
+                }else {
+                    menu.findItem(R.id.action_done).setVisible(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         return true;
     }
 
@@ -156,7 +210,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        mPicButton.setVisibility(View.VISIBLE);
+        String string = scannerEditText.getText().toString();
+        if (TextUtils.isEmpty(string)) {
+            scannerEditText.setError("This field must contain at least 6 characters");
+        } else if (!TextUtils.isEmpty(string)) {
+            mPicButton.setVisibility(View.VISIBLE);
+        }
         switch (checkedId) {
             case R.id.radio_workshop_strip:
                 sImageNameAccordingToRadioButton = "WST";
