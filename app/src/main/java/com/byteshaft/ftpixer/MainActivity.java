@@ -66,12 +66,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String str = s.toString();
                 String editText = scannerEditText.getText().toString().trim();
-                if (!editText.isEmpty()) {
+                if (editText.isEmpty() || editText.length() == 0 || editText.equals("")) {
+                    mPicButton.setVisibility(View.GONE);
+                    actionBarMenu.findItem(R.id.action_done).setVisible(false);
+                }else if (arrayList.size() > 0) {
                     mPicButton.setVisibility(View.VISIBLE);
-                }else if (editText.isEmpty() || editText.length() == 0 || editText.equals("")) {
-                    mPicButton.setVisibility(View.INVISIBLE);
+                    actionBarMenu.findItem(R.id.action_done).setVisible(true);
                 }
-
             }
 
             @Override
@@ -134,14 +135,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String str = s.toString();
-                String editText = scannerEditText.getText().toString().trim();
                 if(str.length() > 0 && str.startsWith(" ")){
                     Log.v("","Cannot begin with space");
                     scannerEditText.setText("");
-                } else if (editText.isEmpty() || editText.length() == 0 || editText.equals("")) {
-                    menu.findItem(R.id.action_done).setVisible(false);
-                }else {
-                    menu.findItem(R.id.action_done).setVisible(true);
                 }
             }
 
@@ -205,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Helpers.saveCounterValue(mPreviousCounterValue + 1);
                 mPhotoCount.setVisibility(View.VISIBLE);
                 mPhotoCount.setText(String.valueOf(arrayList.size()));
+                actionBarMenu.findItem(R.id.action_done).setVisible(true);
             }
         }
     }
@@ -214,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String string = scannerEditText.getText().toString();
         if (TextUtils.isEmpty(string)) {
             scannerEditText.setError("This field must contain at least 6 characters");
-        } else if (!TextUtils.isEmpty(string)) {
+        } else if (!TextUtils.isEmpty(string)){
             mPicButton.setVisibility(View.VISIBLE);
         }
         switch (checkedId) {
