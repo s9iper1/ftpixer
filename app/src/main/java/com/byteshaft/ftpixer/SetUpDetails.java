@@ -140,11 +140,17 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case PICK_IMAGE:
-                data.getDataString();
-                if (resultCode == RESULT_OK && data != null) {
-                    SharedPreferences preferences = AppGlobals.getPreferenceManager();
-                    preferences.edit().putString("splash_bg", data.getData().toString()).apply();
-                }
+               try {
+                   if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && null != data) {
+                       SharedPreferences preferences = AppGlobals.getPreferenceManager();
+                       preferences.edit().putString("splash_bg", data.getData().toString()).apply();
+                   } else {
+                       Toast.makeText(getApplicationContext(), "You haven't picked Image",
+                               Toast.LENGTH_SHORT).show();
+                   }
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
         }
     }
 }
