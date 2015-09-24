@@ -25,7 +25,7 @@ public class Helpers {
     public static int getPreviousCounterValue() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(
                 AppGlobals.getContext());
-        return sharedPreferences.getInt(AppGlobals.COUNTER_VALUE, 0);
+        return sharedPreferences.getInt(AppGlobals.COUNTER_VALUE, 1);
     }
 
     public static void saveCounterValue(int counterValue) {
