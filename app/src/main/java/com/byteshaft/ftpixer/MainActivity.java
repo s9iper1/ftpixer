@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button mScanButton;
     private Button mPicButton;
-    private Button mButtonCount;
+    private TextView mPhotoCount;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private ScannerActivity scannerActivity;
     public static EditText scannerEditText;
@@ -58,9 +59,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         radioGroupTwo.setOnCheckedChangeListener(this);
         mScanButton = (Button) findViewById(R.id.scan_button);
         mPicButton  = (Button) findViewById(R.id.pic_button);
-        mButtonCount = (Button) findViewById(R.id.buttonCount);
+        mPhotoCount = (TextView) findViewById(R.id.photo_count);
         if (arrayList.size() == 0) {
-            mButtonCount.setVisibility(View.INVISIBLE);
+            mPhotoCount.setVisibility(View.INVISIBLE);
         }
         mScanButton.setOnClickListener(this);
         mPicButton.setOnClickListener(this);
@@ -148,8 +149,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 arrayList.add(sFileSavedImage.getAbsolutePath());
             if (arrayList.size() > 0) {
                 Helpers.saveCounterValue(mPreviousCounterValue + 1);
-                mButtonCount.setVisibility(View.VISIBLE);
-                mButtonCount.setText(String.valueOf(arrayList.size()));
+                mPhotoCount.setVisibility(View.VISIBLE);
+                mPhotoCount.setText(String.valueOf(arrayList.size()));
             }
         }
     }

@@ -165,14 +165,14 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:visibility="gone"/>
-    <Button
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:textColor="#0453A2"
-        android:id="@+id/buttonCount"
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:textColor="#006400"
+        android:textSize="20dp"
+        android:id="@+id/photo_count"
         android:layout_below="@+id/scrollView"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@id/pic_button"
+        android:layout_margin="10dp"
         android:visibility="gone"/>
 </RelativeLayout>

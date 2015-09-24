@@ -53,6 +53,7 @@ public class UploadActivity extends Activity implements View.OnClickListener {
         progressDialog.setTitle("Uploading To FTP");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setProgress(currentProgress);
+        progressDialog.setMax(100);
         progressDialog.show();
     }
 
@@ -121,6 +122,7 @@ public class UploadActivity extends Activity implements View.OnClickListener {
 
         public void started() {
 //            Toast.makeText(getBaseContext(), " Upload Started ...", Toast.LENGTH_SHORT).show();
+            progressDialog.setProgress(10);
         }
 
         public void transferred(int length) {
@@ -129,6 +131,8 @@ public class UploadActivity extends Activity implements View.OnClickListener {
 
         public void completed() {
 //            Toast.makeText(getBaseContext(), " completed ...", Toast.LENGTH_SHORT).show();
+            progressDialog.setProgress(100);
+            progressDialog.dismiss();
         }
 
         public void aborted() {
