@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -29,15 +28,13 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
     private EditText mPassword;
     private Button mContinueButton;
     private CheckBox mSaveServerSetting;
-    SharedPreferences preferences;
-    AppGlobals mAppGlobals;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0453A2")));
         setContentView(R.layout.setup);
-        mAppGlobals = new AppGlobals();
         preferences = AppGlobals.getPreferenceManager();
         mSaveServerSetting = (CheckBox) findViewById(R.id.save_settings);
         mContinueButton = (Button) findViewById(R.id.button_continue);
@@ -81,7 +78,6 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_continue:
-
                 if ((mServerName.getText().toString().trim()).isEmpty() ||
                         (mPort.getText().toString().trim()).isEmpty() ||
                         (mPassword.getText().toString().trim()).isEmpty() ||
@@ -94,15 +90,15 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
                 }
 
                 if (mSaveServerSetting.isChecked()) {
-                    preferences.edit().putString("server", mServerName.toString().trim()).apply();
-                    preferences.edit().putString("port", mPort.toString().trim()).apply();
-                    preferences.edit().putString("username", mUsername.toString().trim()).apply();
-                    preferences.edit().putString("password", mPassword.toString().trim()).apply();
+                    preferences.edit().putString(AppGlobals.SERVER, mServerName.getText().toString().trim()).apply();
+                    preferences.edit().putString(AppGlobals.PORT, mPort.getText().toString().trim()).apply();
+                    preferences.edit().putString(AppGlobals.USERNAME, mUsername.getText().toString().trim()).apply();
+                    preferences.edit().putString(AppGlobals.PASSWORD, mPassword.getText().toString().trim()).apply();
                 } else {
-                    mAppGlobals.sServerIP = mServerName.getText().toString();
-                    mAppGlobals.sPortNumber = mPort.getText().toString();
-                    mAppGlobals.sUsername = mUsername.getText().toString();
-                    mAppGlobals.sPassword = mPassword.getText().toString();
+                    AppGlobals.sServerIP = mServerName.getText().toString();
+                    AppGlobals.sPortNumber = mPort.getText().toString();
+                    AppGlobals.sUsername = mUsername.getText().toString();
+                    AppGlobals.sPassword = mPassword.getText().toString();
                 }
                 break;
         }
