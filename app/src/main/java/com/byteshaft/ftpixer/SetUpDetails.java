@@ -3,10 +3,14 @@ package com.byteshaft.ftpixer;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +19,11 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class SetUpDetails extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -27,17 +35,21 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
     private EditText mUsername;
     private EditText mPassword;
     private Button mContinueButton;
+    private Button mChangeBackgroundButton;
     private CheckBox mSaveServerSetting;
     private SharedPreferences preferences;
+    private static final int PICK_IMAGE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0453A2")));
         setContentView(R.layout.setup);
+        setTitle("Settings");
         preferences = AppGlobals.getPreferenceManager();
         mSaveServerSetting = (CheckBox) findViewById(R.id.save_settings);
         mContinueButton = (Button) findViewById(R.id.button_continue);
+        mChangeBackgroundButton = (Button) findViewById(R.id.change_splash_screen);
         mServerName = (EditText) findViewById(R.id.server_name);
         mPort = (EditText) findViewById(R.id.port);
         mUsername = (EditText) findViewById(R.id.user_name);
@@ -46,6 +58,7 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
         mWifi = (RadioButton) findViewById(R.id.wifi_radio_button);
         mMobileData = (RadioButton) findViewById(R.id.mobile_data_radio_button);
         mContinueButton.setOnClickListener(this);
+        mChangeBackgroundButton.setOnClickListener(this);
         mSaveServerSetting.setOnCheckedChangeListener(this);
         dataUsageGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -102,6 +115,16 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
                     AppGlobals.sPassword = mPassword.getText().toString();
                 }
                 break;
+            case R.id.change_splash_screen:
+                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                getIntent.setType("image/*");
+
+                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                pickIntent.setType("image/*");
+
+                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+                startActivityForResult(chooserIntent, PICK_IMAGE);
         }
 }
 
@@ -110,6 +133,18 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
         switch (buttonView.getId()) {
             case R.id.save_settings:
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case PICK_IMAGE:
+                data.getDataString();
+                if (resultCode == RESULT_OK && data != null) {
+                    SharedPreferences preferences = AppGlobals.getPreferenceManager();
+                    preferences.edit().putString("splash_bg", data.getData().toString()).apply();
+                }
         }
     }
 }
