@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,6 +25,9 @@ public class UploadActivity extends Activity implements View.OnClickListener {
     private int imagesCount;
     private int addPerUpdate;
     private int currentProgress;
+
+    int fileSize = 0;
+    int counter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,26 +125,37 @@ public class UploadActivity extends Activity implements View.OnClickListener {
     public class MyTransferListener implements FTPDataTransferListener {
 
         public void started() {
-//            Toast.makeText(getBaseContext(), " Upload Started ...", Toast.LENGTH_SHORT).show();
-            progressDialog.setProgress(10);
+            progressDialog.setProgress(0);
         }
 
         public void transferred(int length) {
-//            Toast.makeText(getBaseContext(), " transferred ..." + length, Toast.LENGTH_SHORT).show();
+            progressDialog.setProgress(counter * 2);
+            counter++;
         }
 
         public void completed() {
-//            Toast.makeText(getBaseContext(), " completed ...", Toast.LENGTH_SHORT).show();
             progressDialog.setProgress(100);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             progressDialog.dismiss();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(
+                            getApplicationContext(),
+                            "Upload Completed ...",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         public void aborted() {
-//            Toast.makeText(getApplicationContext(), " transfer aborted ,", Toast.LENGTH_SHORT).show();
         }
 
         public void failed() {
-//            System.out.println(" failed ...");
         }
 
     }
