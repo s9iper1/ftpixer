@@ -62,4 +62,9 @@ public class AppGlobals  extends Application {
         SharedPreferences sharedPreferences = getPreferenceManager();
         return sharedPreferences.getString(PORT, "");
     }
+
+    public static boolean getSettingState() {
+        SharedPreferences sharedPreferences = getPreferenceManager();
+        return sharedPreferences.getBoolean("setting_saved", false);
+    }
 }

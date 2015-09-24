@@ -94,6 +94,7 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
                     preferences.edit().putString(AppGlobals.PORT, mPort.getText().toString().trim()).apply();
                     preferences.edit().putString(AppGlobals.USERNAME, mUsername.getText().toString().trim()).apply();
                     preferences.edit().putString(AppGlobals.PASSWORD, mPassword.getText().toString().trim()).apply();
+                    preferences.edit().putBoolean("setting_saved", true).apply();
                 } else {
                     AppGlobals.sServerIP = mServerName.getText().toString();
                     AppGlobals.sPortNumber = mPort.getText().toString();

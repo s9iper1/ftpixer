@@ -83,10 +83,10 @@ public class UploadActivity extends Activity implements View.OnClickListener {
         @Override
         protected Void doInBackground(ArrayList<String>... arrayLists) {
             Log.i(AppGlobals.getLogTag(getClass()), "uploading started");
-            if (AppGlobals.sPassword != null && AppGlobals.sPortNumber != null
+            if (!AppGlobals.getSettingState() && AppGlobals.sPassword != null && AppGlobals.sPortNumber != null
                     && AppGlobals.sServerIP != null) {
                 uploadFile(AppGlobals.sServerIP, AppGlobals.sUsername, Integer.parseInt(AppGlobals.sPortNumber), AppGlobals.sPassword, arrayList);
-            } else if (!(AppGlobals.getUSername().trim()).isEmpty() &&
+            } else if (AppGlobals.getSettingState() && !(AppGlobals.getUSername().trim()).isEmpty() &&
                     !(AppGlobals.getPassword().trim()).isEmpty() &&
                     !(AppGlobals.getServer().trim()).isEmpty() && !(AppGlobals.getPort().trim()).isEmpty()) {
                 uploadFile(AppGlobals.getServer(), AppGlobals.getUSername(),
@@ -95,6 +95,8 @@ public class UploadActivity extends Activity implements View.OnClickListener {
             return null;
         }
     }
+
+
 
     public void uploadFile(String host, String username, int port, String password,
                            ArrayList<String> files) {
@@ -107,7 +109,8 @@ public class UploadActivity extends Activity implements View.OnClickListener {
                 System.out.println(image);
                 File file = new File(image);
                 ftpClient.upload(file, new MyTransferListener());
-                progressDialog.setProgress(currentProgress + addPerUpdate);
+                progressDialog.setProgress(progressDialog.getProgress() + addPerUpdate);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
