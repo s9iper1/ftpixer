@@ -1,27 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/ftp_details"
-        android:text="FTP Details"
-        android:textSize="20sp"
-        android:layout_margin="10dp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:id="@+id/main_linear_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:orientation="vertical"
-        android:layout_marginLeft="10dp"
-        android:layout_below="@+id/ftp_details">
+        android:layout_marginLeft="10dp" >
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -102,6 +92,22 @@
             android:inputType="textPassword"
             android:background="@android:drawable/edit_text" />
 
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Splash Screen Logo"
+            android:layout_marginTop="5dp"
+            android:textSize="16dp"
+            android:textColor="#000"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/change_splash_screen"
+            android:layout_width="250dp"
+            android:layout_marginTop="2dp"
+            android:layout_height="wrap_content"
+            android:text="Pick image" />
+
     </LinearLayout>
 
     <TextView
@@ -119,7 +125,7 @@
 
         <RadioGroup
             android:id="@+id/data_uage_radiogroup"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="8dp"
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:gravity="center"
@@ -160,6 +166,6 @@
         android:textSize="16sp"
         android:layout_above="@+id/button_continue"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="39dp" />
+        android:layout_marginBottom="25dp" />
 
 </RelativeLayout>
