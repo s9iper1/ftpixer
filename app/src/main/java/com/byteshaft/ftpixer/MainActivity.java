@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     private Button mScanButton;
-    private Button mPicButton;
+    public static Button mPicButton;
     private TextView mPhotoCount;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private ScannerActivity scannerActivity;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static RadioButton jobNumberRadioButton;
     private static RadioButton regNoRadioButton;
     private RadioGroup radioGroup;
-    private RadioGroup radioGroupTwo;
+    public static RadioGroup radioGroupTwo;
     private static File sFileSavedImage;
     private ArrayList<String> arrayList;
     private static String sImageNameAccordingToRadioButton;
@@ -64,12 +65,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String str = s.toString();
                 String editText = scannerEditText.getText().toString().trim();
                 if (editText.isEmpty() || editText.length() == 0 || editText.equals("")) {
                     mPicButton.setVisibility(View.GONE);
                     actionBarMenu.findItem(R.id.action_done).setVisible(false);
-                }else if (arrayList.size() > 0) {
+                } else if (arrayList.size() > 0 || editText.length() == 6) {
                     mPicButton.setVisibility(View.VISIBLE);
                     actionBarMenu.findItem(R.id.action_done).setVisible(true);
                 }
@@ -158,10 +158,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_done) {
-            Intent intent = new Intent(this, UploadActivity.class);
-            intent.putExtra("images", arrayList);
-            startActivity(intent);
-            System.out.println("done");
+
+            if (radioGroupTwo.getCheckedRadioButtonId() == -1) {
+                Toast.makeText(this, "Claim type must be selected", Toast.LENGTH_LONG).show();
+                return false;
+            } else if (arrayList.size() == 0) {
+                Toast.makeText(this, "You must take atleast one photo", Toast.LENGTH_LONG).show();
+                return false;
+            }
+
+            if (AppGlobals.isInternetConnected()) {
+                String networkPreference = AppGlobals.getInternetPreference();
+                if (networkPreference != null) {
+                    if ("wifi".equals(networkPreference) && !AppGlobals.isWifiConnected()) {
+                        Toast.makeText(this, "Uploading will only work on wifi", Toast.LENGTH_LONG).show();
+                        return false;
+                    } else if ("data".equals(networkPreference) && !AppGlobals.isMobileDataConnected()) {
+                        Toast.makeText(this, "Uploading will only work on Mobile data", Toast.LENGTH_LONG).show();
+                        return false;
+                    } else {
+                        Intent intent = new Intent(this, UploadActivity.class);
+                        intent.putExtra("images", arrayList);
+                        startActivity(intent);
+                    }
+                }
+            } else {
+                Toast.makeText(this, "No internet connected enabled, please enable it", Toast.LENGTH_LONG).show();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -173,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.scan_button:
                 Intent intent = new Intent(MainActivity.this, ScannerActivity.class);
                 startActivity(intent);
+                radioGroup.clearCheck();
                 break;
             case R.id.pic_button:
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -196,7 +220,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         System.out.println(resultCode);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-                arrayList.add(sFileSavedImage.getAbsolutePath());
+
+            arrayList.add(sFileSavedImage.getAbsolutePath());
             if (arrayList.size() > 0) {
                 Helpers.saveCounterValue(mPreviousCounterValue + 1);
                 mPhotoCount.setVisibility(View.VISIBLE);

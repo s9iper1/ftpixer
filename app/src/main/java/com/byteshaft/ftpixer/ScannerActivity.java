@@ -124,10 +124,11 @@ public class ScannerActivity extends Activity {
                     ScannerActivity.this.finish();
                     MainActivity.scannerEditText.setText("");
                     MainActivity.scannerEditText.setText(scanResult);
+                    if (MainActivity.radioGroupTwo.getCheckedRadioButtonId() != -1) {
+                        MainActivity.mPicButton.setVisibility(View.VISIBLE);
+                    }
                     releaseCamera();
-
                     barcodeScanned = true;
-
                     break;
                 }
             }

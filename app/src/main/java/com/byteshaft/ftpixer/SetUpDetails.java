@@ -4,12 +4,16 @@ package com.byteshaft.ftpixer;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -22,13 +26,19 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
-public class SetUpDetails extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class SetUpDetails extends AppCompatActivity implements View.OnClickListener,
+        CompoundButton.OnCheckedChangeListener {
 
     private RadioButton mWifi;
     private RadioButton mMobileData;
+    private RadioGroup dataUsageGroup;
     private ConnectivityManager connectivityManager;
     private EditText mServerName;
     private EditText mPort;
@@ -54,37 +64,30 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
         mPort = (EditText) findViewById(R.id.port);
         mUsername = (EditText) findViewById(R.id.user_name);
         mPassword = (EditText) findViewById(R.id.password);
-        RadioGroup dataUsageGroup = (RadioGroup) findViewById(R.id.data_uage_radiogroup);
+        dataUsageGroup = (RadioGroup) findViewById(R.id.data_uage_radiogroup);
         mWifi = (RadioButton) findViewById(R.id.wifi_radio_button);
         mMobileData = (RadioButton) findViewById(R.id.mobile_data_radio_button);
         mContinueButton.setOnClickListener(this);
         mChangeBackgroundButton.setOnClickListener(this);
         mSaveServerSetting.setOnCheckedChangeListener(this);
-        dataUsageGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.wifi_radio_button && isWifiConnected()) {
-                    System.out.println("wifi network");
-                }
 
-                if (checkedId == R.id.data_uage_radiogroup && isMobileDataConnected()) {
-                    System.out.println("mobile network");
-
-                }
+        if (AppGlobals.getSettingState()) {
+            mSaveServerSetting.setChecked(true);
+            mServerName.setText(AppGlobals.getServer());
+            mPort.setText(AppGlobals.getPort());
+            mUsername.setText(AppGlobals.getUSername());
+            mPassword.setText(AppGlobals.getPassword());
+            String network = AppGlobals.getPreferenceManager().getString(AppGlobals.NETWORK_PREF, null);
+            if ("wifi".equals(network)) {
+                mWifi.setChecked(true);
+                mMobileData.setChecked(false);
+            } else if ("data".equals(network)) {
+                mMobileData.setChecked(true);
+                mWifi.setChecked(false);
             }
-        });
-    }
-
-    private boolean isWifiConnected() {
-        connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
-
-    }
-
-    private boolean isMobileDataConnected() {
-        connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected();
-
+        } else {
+            mSaveServerSetting.setChecked(false);
+        }
     }
 
     @Override
@@ -92,28 +95,38 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.button_continue:
                 if ((mServerName.getText().toString().trim()).isEmpty() ||
-                        (mPort.getText().toString().trim()).isEmpty() ||
-                        (mPassword.getText().toString().trim()).isEmpty() ||
-                        (mUsername.getText().toString().trim()).isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "All fields must be filled",
+                        mPort.getText().toString().trim().isEmpty() ||
+                        mPassword.getText().toString().trim().isEmpty() ||
+                        mUsername.getText().toString().trim().isEmpty() ||
+                        dataUsageGroup.getCheckedRadioButtonId() == -1)  {
+                    Toast.makeText(getApplicationContext(), "All fields must be filled and selected",
                             Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent intent = new Intent(SetUpDetails.this, MainActivity.class);
-                    startActivity(intent);
-                }
-
-                if (mSaveServerSetting.isChecked()) {
+                    return;
+                } else if (mSaveServerSetting.isChecked()) {
                     preferences.edit().putString(AppGlobals.SERVER, mServerName.getText().toString().trim()).apply();
                     preferences.edit().putString(AppGlobals.PORT, mPort.getText().toString().trim()).apply();
                     preferences.edit().putString(AppGlobals.USERNAME, mUsername.getText().toString().trim()).apply();
                     preferences.edit().putString(AppGlobals.PASSWORD, mPassword.getText().toString().trim()).apply();
+                    preferences.edit().putString(
+                            AppGlobals.NETWORK_PREF,
+                            mWifi.isChecked() ? "wifi" : "data").apply();
                     preferences.edit().putBoolean("setting_saved", true).apply();
                 } else {
                     AppGlobals.sServerIP = mServerName.getText().toString();
                     AppGlobals.sPortNumber = mPort.getText().toString();
                     AppGlobals.sUsername = mUsername.getText().toString();
                     AppGlobals.sPassword = mPassword.getText().toString();
+                    AppGlobals.sNetworkMedium = mWifi.isChecked() ? "wifi" : "data";
+
+                    preferences.edit().putString(AppGlobals.SERVER, null).apply();
+                    preferences.edit().putString(AppGlobals.PORT, null).apply();
+                    preferences.edit().putString(AppGlobals.USERNAME, null).apply();
+                    preferences.edit().putString(AppGlobals.PASSWORD, null).apply();
+                    preferences.edit().putString(AppGlobals.NETWORK_PREF, null).apply();
+                    preferences.edit().putBoolean("setting_saved", false).apply();
                 }
+                Intent intent = new Intent(SetUpDetails.this, MainActivity.class);
+                startActivity(intent);
                 break;
             case R.id.change_splash_screen:
                 Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -141,16 +154,33 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
         switch (requestCode) {
             case PICK_IMAGE:
                try {
-                   if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && null != data) {
-                       SharedPreferences preferences = AppGlobals.getPreferenceManager();
-                       preferences.edit().putString("splash_bg", data.getData().toString()).apply();
+                   if (resultCode == RESULT_OK && null != data) {
+                       Uri selectedImage = data.getData();
+                       new BitmapTask().execute(selectedImage);
                    } else {
-                       Toast.makeText(getApplicationContext(), "You haven't picked Image",
+                       Toast.makeText(getApplicationContext(), "You haven't picked an Image",
                                Toast.LENGTH_SHORT).show();
                    }
                } catch (Exception e) {
                    e.printStackTrace();
                }
+        }
+    }
+
+    class BitmapTask extends AsyncTask<Uri, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Uri... params) {
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), params[0]);
+                FileOutputStream out = new FileOutputStream(AppGlobals.getSplashPath());
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+                out.flush();
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 }
