@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -157,10 +158,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_done) {
-            Intent intent = new Intent(this, UploadActivity.class);
-            intent.putExtra("images", arrayList);
-            startActivity(intent);
-            System.out.println("done");
+
+            if (radioGroupTwo.getCheckedRadioButtonId() == -1) {
+                Toast.makeText(this, "Claim type must be selected", Toast.LENGTH_LONG).show();
+                return false;
+            } else if (arrayList.size() == 0) {
+                Toast.makeText(this, "You must take atleast one photo", Toast.LENGTH_LONG).show();
+                return false;
+            }
+
+            if (AppGlobals.isInternetConnected()) {
+                String networkPreference = AppGlobals.getInternetPreference();
+                if (networkPreference != null) {
+                    if ("wifi".equals(networkPreference) && !AppGlobals.isWifiConnected()) {
+                        Toast.makeText(this, "Uploading will only work on wifi", Toast.LENGTH_LONG).show();
+                        return false;
+                    } else if ("data".equals(networkPreference) && !AppGlobals.isMobileDataConnected()) {
+                        Toast.makeText(this, "Uploading will only work on Mobile data", Toast.LENGTH_LONG).show();
+                        return false;
+                    } else {
+                        Intent intent = new Intent(this, UploadActivity.class);
+                        intent.putExtra("images", arrayList);
+                        startActivity(intent);
+                    }
+                }
+            } else {
+                Toast.makeText(this, "No internet connected enabled, please enable it", Toast.LENGTH_LONG).show();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -11,10 +11,17 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import it.sauronsoftware.ftp4j.FTPAbortedException;
 import it.sauronsoftware.ftp4j.FTPClient;
+import it.sauronsoftware.ftp4j.FTPDataTransferException;
 import it.sauronsoftware.ftp4j.FTPDataTransferListener;
+import it.sauronsoftware.ftp4j.FTPException;
+import it.sauronsoftware.ftp4j.FTPIllegalReplyException;
 
 public class UploadActivity extends Activity implements View.OnClickListener {
 
@@ -88,14 +95,19 @@ public class UploadActivity extends Activity implements View.OnClickListener {
         @Override
         protected Void doInBackground(ArrayList<String>... arrayLists) {
             Log.i(AppGlobals.getLogTag(getClass()), "uploading started");
-            if (!AppGlobals.getSettingState() && AppGlobals.sPassword != null && AppGlobals.sPortNumber != null
+            if (!AppGlobals.getSettingState()
+                    && AppGlobals.sPassword != null
+                    && AppGlobals.sPortNumber != null
                     && AppGlobals.sServerIP != null) {
                 uploadFile(AppGlobals.sServerIP, AppGlobals.sUsername, Integer.parseInt(AppGlobals.sPortNumber), AppGlobals.sPassword, arrayList);
             } else if (AppGlobals.getSettingState() && !(AppGlobals.getUSername().trim()).isEmpty() &&
                     !(AppGlobals.getPassword().trim()).isEmpty() &&
-                    !(AppGlobals.getServer().trim()).isEmpty() && !(AppGlobals.getPort().trim()).isEmpty()) {
+                    !(AppGlobals.getServer().trim()).isEmpty() &&
+                    !(AppGlobals.getPort().trim()).isEmpty()) {
+
                 uploadFile(AppGlobals.getServer(), AppGlobals.getUSername(),
-                        Integer.parseInt(AppGlobals.getPort()), AppGlobals.getPassword(), arrayLists[0]);
+                        Integer.parseInt(AppGlobals.getPort()),
+                        AppGlobals.getPassword(), arrayLists[0]);
             }
             return null;
         }
@@ -111,13 +123,32 @@ public class UploadActivity extends Activity implements View.OnClickListener {
             ftpClient.login(username, password);
             ftpClient.setType(FTPClient.TYPE_BINARY);
             for (String image : files) {
-                System.out.println(image);
                 File file = new File(image);
                 ftpClient.upload(file, new MyTransferListener());
                 progressDialog.setProgress(progressDialog.getProgress() + addPerUpdate);
 
             }
-        } catch (Exception e) {
+        } catch (UnknownHostException ignore) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.dismiss();
+                    Toast.makeText(
+                            UploadActivity.this,
+                            "Cannot resolve host address, is internet working ?",
+                            Toast.LENGTH_LONG).show();
+                    onBackPressed();
+                }
+            });
+        } catch (FTPException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (FTPDataTransferException e) {
+            e.printStackTrace();
+        } catch (FTPIllegalReplyException e) {
+            e.printStackTrace();
+        } catch (FTPAbortedException e) {
             e.printStackTrace();
         }
     }
