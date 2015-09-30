@@ -72,7 +72,7 @@ public class UploadActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.start_again:
-                Intent intent = new Intent(this, SplashScreen.class);
+                Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 finish();
                 MainActivity.mainActivity.finish();
