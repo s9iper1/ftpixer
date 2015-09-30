@@ -127,6 +127,7 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
                 }
                 Intent intent = new Intent(SetUpDetails.this, MainActivity.class);
                 startActivity(intent);
+                finish();
                 break;
             case R.id.change_splash_screen:
                 Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
