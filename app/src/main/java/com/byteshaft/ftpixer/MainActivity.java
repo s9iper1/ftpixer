@@ -18,6 +18,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Checkable;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -46,6 +49,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static Activity mainActivity;
     private int mPreviousCounterValue;
     private Menu actionBarMenu;
+    private EditText employeeEditText;
+    private CheckBox employeeCheckBox;
+    private static String sTextFromEmployeeEdidText;
+    private String employeeNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         arrayList = new ArrayList<>();
         scannerActivity = new ScannerActivity();
         scannerEditText = (EditText) findViewById(R.id.barCodeEditText);
+        employeeEditText = (EditText) findViewById(R.id.employee_edittext);
+        employeeCheckBox = (CheckBox) findViewById(R.id.checkbox_supplementary_work);
         scannerEditText.setFocusable(false);
         scannerEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -66,7 +75,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String editText = scannerEditText.getText().toString().trim();
-                if (editText.isEmpty() || editText.length() == 0 || editText.equals("")) {
+                employeeNumber = employeeEditText.getText().toString().trim();
+                if (employeeNumber.isEmpty() || employeeNumber.length() == 0 || employeeNumber.equals("")) {
+                    mPicButton.setVisibility(View.GONE);
+                }
+                 else if (editText.isEmpty() || editText.length() == 0 || editText.equals("")) {
                     mPicButton.setVisibility(View.GONE);
                     actionBarMenu.findItem(R.id.action_done).setVisible(false);
                 } else if (arrayList.size() > 0 && editText.length() > 6) {
@@ -205,12 +218,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mPreviousCounterValue = 0;
                 mPreviousCounterValue = Helpers.getPreviousCounterValue();
                 sTextFromScannerEditText = scannerEditText.getText().toString();
-                File image = new File(imagesFolder, sImageNameAccordingToRadioButton + "_"
-                        + sTextFromScannerEditText +  "_" +
-                        getPreviousValueAndAddOne(mPreviousCounterValue) + ".jpg");
-                Uri uriSavedImage = Uri.fromFile(image);
-                sFileSavedImage = image;
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
+                if (employeeCheckBox.isChecked()) {
+                    File image = new File(imagesFolder, sImageNameAccordingToRadioButton + "_" + employeeNumber + "_" + "S" + "_"
+                            + sTextFromScannerEditText +  "_" +
+                            getPreviousValueAndAddOne(mPreviousCounterValue) + ".jpg");
+                    Uri uriSavedImage = Uri.fromFile(image);
+                    sFileSavedImage = image;
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
+                } else {
+                    File image1 = new File(imagesFolder, sImageNameAccordingToRadioButton + "_" + employeeNumber + "_"
+                            + sTextFromScannerEditText +  "_" +
+                            getPreviousValueAndAddOne(mPreviousCounterValue) + ".jpg");
+                    Uri uriSavedImage = Uri.fromFile(image1);
+                    sFileSavedImage = image1;
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
+                }
                 startActivityForResult(cameraIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
                 break;
         }
