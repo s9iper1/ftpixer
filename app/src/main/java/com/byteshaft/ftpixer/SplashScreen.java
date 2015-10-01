@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
 
@@ -26,9 +28,15 @@ public class SplashScreen extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
+
         ImageView splash = (ImageView) findViewById(R.id.imageView);
         String splashBg = AppGlobals.getSplashPath().getAbsolutePath();
-        splash.setImageURI(Uri.parse(splashBg));
+
+        if (new File(splashBg).exists()) {
+            splash.setImageURI(Uri.parse(splashBg));
+        } else {
+            splash.setBackgroundResource(R.drawable.splash);
+        }
         Button continueButton = (Button)findViewById(R.id.continue_button);
         Button setup = (Button)findViewById(R.id.set_up);
         continueButton.setOnClickListener(this);

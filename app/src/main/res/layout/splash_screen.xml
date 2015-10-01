@@ -10,7 +10,6 @@
         android:layout_width="250dp"
         android:layout_height="300dp"
         android:layout_marginTop="50dp"
-        android:background="@drawable/splash"
         android:id="@+id/imageView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />

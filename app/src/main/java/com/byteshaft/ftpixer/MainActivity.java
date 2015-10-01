@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (editText.isEmpty() || editText.length() == 0 || editText.equals("")) {
                     mPicButton.setVisibility(View.GONE);
                     actionBarMenu.findItem(R.id.action_done).setVisible(false);
-                } else if (arrayList.size() > 0 || editText.length() == 6) {
+                } else if (arrayList.size() > 0 && editText.length() > 6) {
                     mPicButton.setVisibility(View.VISIBLE);
                     actionBarMenu.findItem(R.id.action_done).setVisible(true);
                 }
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mScanButton.setOnClickListener(this);
         mPicButton.setOnClickListener(this);
         scannerEditText.setFilters(new InputFilter[]
-                {new InputFilter.LengthFilter(6)});
+                {new InputFilter.LengthFilter(7)});
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     scannerEditText.setFocusableInTouchMode(true);
                     scannerEditText.setFocusable(true);
                     scannerEditText.setText("");
-                    int maxLength = 6;
+                    int maxLength = 7;
                     scannerEditText.setFilters(new InputFilter[]
                             {new InputFilter.LengthFilter(maxLength)});
                     System.out.println("Job Number Button Checked");
