@@ -31,7 +31,6 @@ public class SplashScreen extends AppCompatActivity implements View.OnClickListe
 
         ImageView splash = (ImageView) findViewById(R.id.imageView);
         String splashBg = AppGlobals.getSplashPath().getAbsolutePath();
-
         if (new File(splashBg).exists()) {
             splash.setImageURI(Uri.parse(splashBg));
         } else {

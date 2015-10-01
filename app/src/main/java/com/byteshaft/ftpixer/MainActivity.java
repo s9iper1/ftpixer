@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                  else if (editText.isEmpty() || editText.length() == 0 || editText.equals("")) {
                     mPicButton.setVisibility(View.GONE);
                     actionBarMenu.findItem(R.id.action_done).setVisible(false);
-                } else if (arrayList.size() > 0 && editText.length() > 6) {
+                } else if (arrayList.size() > 0 && editText.length() >= 6) {
                     mPicButton.setVisibility(View.VISIBLE);
                     actionBarMenu.findItem(R.id.action_done).setVisible(true);
                 }
