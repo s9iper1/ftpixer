@@ -118,12 +118,9 @@ public class ScannerActivity extends Activity {
                     Log.i("<<<<<<Asset Code>>>>> ",
                             "<<<<Bar Code>>> " + sym.getData());
                     scanResult = sym.getData().trim();
-
-                    Toast.makeText(ScannerActivity.this, scanResult,
-                            Toast.LENGTH_SHORT).show();
                     ScannerActivity.this.finish();
                     MainActivity.scannerEditText.setText("");
-                    MainActivity.scannerEditText.setText(scanResult);
+                    MainActivity.scannerEditText.setText(getLastCharacters(6, scanResult));
                     if (MainActivity.radioGroupTwo.getCheckedRadioButtonId() != -1) {
                         MainActivity.mPicButton.setVisibility(View.VISIBLE);
                     }
@@ -141,6 +138,10 @@ public class ScannerActivity extends Activity {
             autoFocusHandler.postDelayed(doAutoFocus, 1000);
         }
     };
+
+    private String getLastCharacters(int length, String text) {
+        return text.substring(text.length() - length);
+    }
 
 
 }
