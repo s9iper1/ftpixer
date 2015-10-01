@@ -33,7 +33,7 @@ public class ScannerActivity extends Activity {
     private boolean barcodeScanned = false;
     private boolean previewing = true;
 
-    String scanResult;
+    public static String scanResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +142,5 @@ public class ScannerActivity extends Activity {
     private String getLastCharacters(int length, String text) {
         return text.substring(text.length() - length);
     }
-
 
 }
