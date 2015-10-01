@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     sFileSavedImage = image;
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
                 } else {
-                    File image1 = new File(imagesFolder, sImageNameAccordingToRadioButton + "_" + employeeNumber + "_"
+                    File image1 = new File(imagesFolder, sImageNameAccordingToRadioButton +  "_" + employeeNumber + "_" + "N" + "_"
                             + sTextFromScannerEditText +  "_" +
                             getPreviousValueAndAddOne(mPreviousCounterValue) + ".jpg");
                     Uri uriSavedImage = Uri.fromFile(image1);
