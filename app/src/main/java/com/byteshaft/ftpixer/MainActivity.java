@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.pic_button:
                 mPreviousCounterValue = Helpers.getPreviousCounterValue();
-                File createNextFolder = null;
+                File createNextFolder;
                 ArrayList<File> arrayList = new ArrayList<>();
                 if (newSession) {
                     Helpers.saveCounterValue(1);
@@ -237,10 +237,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     AppGlobals.setCurrentPath(createNextFolder);
                     newSession = false;
                 }
-
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-
-
                 sTextFromScannerEditText = scannerEditText.getText().toString();
                 if (employeeCheckBox.isChecked()) {
                     File image = new File(AppGlobals.getCurrentPath(), sImageNameAccordingToRadioButton + "_" + employeeNumber + "_" + "S" + "_"
