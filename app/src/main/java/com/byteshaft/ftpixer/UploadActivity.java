@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -100,12 +99,12 @@ public class UploadActivity extends Activity implements View.OnClickListener {
                     && AppGlobals.sPortNumber != null
                     && AppGlobals.sServerIP != null) {
                 uploadFile(AppGlobals.sServerIP, AppGlobals.sUsername, Integer.parseInt(AppGlobals.sPortNumber), AppGlobals.sPassword, arrayList);
-            } else if (AppGlobals.getSettingState() && !(AppGlobals.getUSername().trim()).isEmpty() &&
+            } else if (AppGlobals.getSettingState() && !(AppGlobals.getUsername().trim()).isEmpty() &&
                     !(AppGlobals.getPassword().trim()).isEmpty() &&
                     !(AppGlobals.getServer().trim()).isEmpty() &&
                     !(AppGlobals.getPort().trim()).isEmpty()) {
 
-                uploadFile(AppGlobals.getServer(), AppGlobals.getUSername(),
+                uploadFile(AppGlobals.getServer(), AppGlobals.getUsername(),
                         Integer.parseInt(AppGlobals.getPort()),
                         AppGlobals.getPassword(), arrayLists[0]);
             }
