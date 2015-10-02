@@ -1,6 +1,6 @@
 package com.byteshaft.ftpixer;
 
-import android.app.Activity;
+    import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -19,8 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Checkable;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -53,11 +51,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CheckBox employeeCheckBox;
     private static String sTextFromEmployeeEdidText;
     private String employeeNumber;
+    private boolean newSession = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainActivity = this;
+        newSession = true;
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0453A2")));
         setContentView(R.layout.activity_main);
         arrayList = new ArrayList<>();
@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         employeeEditText = (EditText) findViewById(R.id.employee_edittext);
         employeeCheckBox = (CheckBox) findViewById(R.id.checkbox_supplementary_work);
         scannerEditText.setFocusable(false);
+        System.out.println("on create called");
         scannerEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -212,21 +213,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 radioGroup.clearCheck();
                 break;
             case R.id.pic_button:
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                File imagesFolder = new File(Environment.getExternalStorageDirectory(), "/DCIM/Camera/");
-                imagesFolder.mkdirs();
-                mPreviousCounterValue = 0;
                 mPreviousCounterValue = Helpers.getPreviousCounterValue();
+                File createNextFolder;
+                ArrayList<File> arrayList = new ArrayList<>();
+                if (newSession) {
+                    Helpers.saveCounterValue(1);
+                    File internalFolder = new File(Environment.getExternalStorageDirectory(),
+                            File.separator + "Android/data" + File.separator + getPackageName());
+                    if (!internalFolder.exists()) {
+                        internalFolder.mkdirs();
+                    }
+                    File[] allFolders = internalFolder.listFiles();
+                    for (File file: allFolders) {
+                        if (file.isDirectory()) {
+                            arrayList.add(file);
+                        }
+                    }
+                    int counter = arrayList.size();
+                    createNextFolder = new File(Environment.getExternalStorageDirectory(),
+                            File.separator + "Android/data" + File.separator + getPackageName() +
+                                    File.separator + ("Session_" + (counter + 1)+"_" + Helpers.getTimeStamp()));
+                    createNextFolder.mkdirs();
+                    AppGlobals.setCurrentPath(createNextFolder);
+                    newSession = false;
+                }
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 sTextFromScannerEditText = scannerEditText.getText().toString();
                 if (employeeCheckBox.isChecked()) {
-                    File image = new File(imagesFolder, sImageNameAccordingToRadioButton + "_" + employeeNumber + "_" + "S" + "_"
+                    File image = new File(AppGlobals.getCurrentPath(), sImageNameAccordingToRadioButton + "_" + employeeNumber + "_" + "S" + "_"
                             + sTextFromScannerEditText +  "_" +
                             getPreviousValueAndAddOne(mPreviousCounterValue) + ".jpg");
                     Uri uriSavedImage = Uri.fromFile(image);
                     sFileSavedImage = image;
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
                 } else {
-                    File image1 = new File(imagesFolder, sImageNameAccordingToRadioButton +  "_" + employeeNumber + "_" + "N" + "_"
+                    File image1 = new File(AppGlobals.getCurrentPath(), sImageNameAccordingToRadioButton +  "_" + employeeNumber + "_" + "N" + "_"
                             + sTextFromScannerEditText +  "_" +
                             getPreviousValueAndAddOne(mPreviousCounterValue) + ".jpg");
                     Uri uriSavedImage = Uri.fromFile(image1);

@@ -5,13 +5,13 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -41,11 +41,6 @@ public class UploadActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.upload_activity);
         arrayList = new ArrayList<>();
-        Intent intent = getIntent();
-        arrayList = intent.getStringArrayListExtra("images");
-        imagesCount = arrayList.size();
-        addPerUpdate = imagesCount / 100;
-        currentProgress = 0;
         startAgain = (Button) findViewById(R.id.start_again);
         exitButton = (Button) findViewById(R.id.exit_button);
         startAgain.setOnClickListener(this);
@@ -99,33 +94,52 @@ public class UploadActivity extends Activity implements View.OnClickListener {
                     && AppGlobals.sPassword != null
                     && AppGlobals.sPortNumber != null
                     && AppGlobals.sServerIP != null) {
-                uploadFile(AppGlobals.sServerIP, AppGlobals.sUsername, Integer.parseInt(AppGlobals.sPortNumber), AppGlobals.sPassword, arrayList);
-            } else if (AppGlobals.getSettingState() && !(AppGlobals.getUSername().trim()).isEmpty() &&
+                uploadFile(AppGlobals.sServerIP, AppGlobals.sUsername,
+                        Integer.parseInt(AppGlobals.sPortNumber), AppGlobals.sPassword);
+            } else if (AppGlobals.getSettingState() && !(AppGlobals.getUsername().trim()).isEmpty() &&
                     !(AppGlobals.getPassword().trim()).isEmpty() &&
                     !(AppGlobals.getServer().trim()).isEmpty() &&
                     !(AppGlobals.getPort().trim()).isEmpty()) {
 
-                uploadFile(AppGlobals.getServer(), AppGlobals.getUSername(),
+                uploadFile(AppGlobals.getServer(), AppGlobals.getUsername(),
                         Integer.parseInt(AppGlobals.getPort()),
-                        AppGlobals.getPassword(), arrayLists[0]);
+                        AppGlobals.getPassword());
             }
             return null;
         }
     }
 
-
-
-    public void uploadFile(String host, String username, int port, String password,
-                           ArrayList<String> files) {
+    public void uploadFile(String host, String username, int port, String password) {
+        File folderPath = new File(Environment.getExternalStorageDirectory(),
+                File.separator + "Android/data" + File.separator + getPackageName() + File.separator);
+        File[] folderCount = folderPath.listFiles();
+        for (File folder : folderCount) {
+            for (File files : folder.listFiles()) {
+                arrayList.add(files.getAbsolutePath());
+            }
+        }
+        imagesCount = arrayList.size();
+        addPerUpdate = imagesCount / 100;
+        currentProgress = 0;
         FTPClient ftpClient = new FTPClient();
         try {
             ftpClient.connect(host, port);
             ftpClient.login(username, password);
             ftpClient.setType(FTPClient.TYPE_BINARY);
-            for (String image : files) {
-                File file = new File(image);
-                ftpClient.upload(file, new MyTransferListener());
-                progressDialog.setProgress(progressDialog.getProgress() + addPerUpdate);
+            File[] allFolders = folderPath.listFiles();
+            for (File folder : allFolders) {
+                ftpClient.changeDirectory("/");
+                try {
+                    ftpClient.changeDirectory(folder.getName());
+                } catch (FTPException ignore) {
+                    ftpClient.createDirectory(folder.getName());
+                    ftpClient.changeDirectory(folder.getName());
+                }
+                for (File files: folder.listFiles()) {
+                    ftpClient.upload(files, new MyTransferListener());
+                    progressDialog.setProgress(progressDialog.getProgress() + addPerUpdate);
+                }
+                removeFiles(folderPath+ File.separator + folder.getName());
 
             }
         } catch (UnknownHostException ignore) {
@@ -150,6 +164,19 @@ public class UploadActivity extends Activity implements View.OnClickListener {
             e.printStackTrace();
         } catch (FTPAbortedException e) {
             e.printStackTrace();
+        }
+    }
+
+    void removeFiles(String path) {
+        File file = new File(path);
+        if (file.exists()) {
+            String deleteCmd = "rm -r " + path;
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                runtime.exec(deleteCmd);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -188,6 +215,5 @@ public class UploadActivity extends Activity implements View.OnClickListener {
 
         public void failed() {
         }
-
     }
 }

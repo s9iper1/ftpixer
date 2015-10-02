@@ -28,6 +28,7 @@ public class AppGlobals  extends Application {
     public static Context sContext;
     public static final String LOGTAG = "ftpixer";
     private static ConnectivityManager connectivityManager;
+    private static File currentPath;
 
     @Override
     public void onCreate() {
@@ -49,7 +50,7 @@ public class AppGlobals  extends Application {
         return sPreferences;
     }
 
-    public static String getUSername() {
+    public static String getUsername() {
         SharedPreferences sharedPreferences = getPreferenceManager();
         return sharedPreferences.getString(USERNAME, "");
     }
@@ -95,5 +96,13 @@ public class AppGlobals  extends Application {
     public static File getSplashPath() {
         return new File(Environment.getExternalStorageDirectory()
                 + File.separator + "splash.jpg");
+    }
+
+    public static void setCurrentPath(File file) {
+        currentPath = file;
+    }
+
+    public static File getCurrentPath() {
+        return currentPath;
     }
 }

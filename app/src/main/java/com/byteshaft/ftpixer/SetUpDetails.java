@@ -4,16 +4,12 @@ package com.byteshaft.ftpixer;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -23,15 +19,10 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class SetUpDetails extends AppCompatActivity implements View.OnClickListener,
         CompoundButton.OnCheckedChangeListener {
@@ -75,7 +66,7 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
             mSaveServerSetting.setChecked(true);
             mServerName.setText(AppGlobals.getServer());
             mPort.setText(AppGlobals.getPort());
-            mUsername.setText(AppGlobals.getUSername());
+            mUsername.setText(AppGlobals.getUsername());
             mPassword.setText(AppGlobals.getPassword());
             String network = AppGlobals.getPreferenceManager().getString(AppGlobals.NETWORK_PREF, null);
             if ("wifi".equals(network)) {

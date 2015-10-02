@@ -6,6 +6,10 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 public class Helpers {
 
@@ -32,5 +36,12 @@ public class Helpers {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(
                 AppGlobals.getContext());
         sharedPreferences.edit().putInt(AppGlobals.COUNTER_VALUE, counterValue).apply();
+    }
+
+    public static String getTimeStamp() {
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        simpleDateFormat.setTimeZone(TimeZone.getDefault());
+        return simpleDateFormat.format(calendar.getTime());
     }
 }
