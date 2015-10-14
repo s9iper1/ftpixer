@@ -240,15 +240,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 sTextFromScannerEditText = scannerEditText.getText().toString();
                 if (employeeCheckBox.isChecked()) {
-                    File image = new File(AppGlobals.getCurrentPath(), sImageNameAccordingToRadioButton + "_" + employeeNumber + "_" + "S" + "_"
-                            + sTextFromScannerEditText +  "_" +
+                    File image = new File(AppGlobals.getCurrentPath(),  sTextFromScannerEditText + "_" + employeeNumber + "_" + "S" + "_" +  sImageNameAccordingToRadioButton
+                            +  "_" + Helpers.getTimeStamp() + "_" +
                             getPreviousValueAndAddOne(mPreviousCounterValue) + ".jpg");
                     Uri uriSavedImage = Uri.fromFile(image);
                     sFileSavedImage = image;
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
                 } else {
-                    File image1 = new File(AppGlobals.getCurrentPath(), sImageNameAccordingToRadioButton +  "_" + employeeNumber + "_" + "N" + "_"
-                            + sTextFromScannerEditText +  "_" +
+                    File image1 = new File(AppGlobals.getCurrentPath(),  sTextFromScannerEditText + "_" + employeeNumber + "_" + "N" + "_" +  sImageNameAccordingToRadioButton
+                            + "_" + Helpers.getTimeStamp() + "_" +
                             getPreviousValueAndAddOne(mPreviousCounterValue) + ".jpg");
                     Uri uriSavedImage = Uri.fromFile(image1);
                     sFileSavedImage = image1;
@@ -301,6 +301,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.radio_workshop_refit:
                 sImageNameAccordingToRadioButton = "WRE";
+                System.out.println(sImageNameAccordingToRadioButton);
+                break;
+            case R.id.radio_workshop_tracker:
+                sImageNameAccordingToRadioButton = "TRA";
                 System.out.println(sImageNameAccordingToRadioButton);
                 break;
 
