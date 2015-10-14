@@ -241,15 +241,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 sTextFromScannerEditText = scannerEditText.getText().toString();
                 if (employeeCheckBox.isChecked()) {
                     File image = new File(AppGlobals.getCurrentPath(),  sTextFromScannerEditText + "_" + employeeNumber + "_" + "S" + "_" +  sImageNameAccordingToRadioButton
-                            +  "_" + Helpers.getTimeStamp() + "_" +
-                            getPreviousValueAndAddOne(mPreviousCounterValue) + ".jpg");
+                            +  "_" + "_" +
+                            getPreviousValueAndAddOne(mPreviousCounterValue) +  "_" + Helpers.getTimeStamp() + ".jpg");
                     Uri uriSavedImage = Uri.fromFile(image);
                     sFileSavedImage = image;
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
                 } else {
                     File image1 = new File(AppGlobals.getCurrentPath(),  sTextFromScannerEditText + "_" + employeeNumber + "_" + "N" + "_" +  sImageNameAccordingToRadioButton
                             + "_" + Helpers.getTimeStamp() + "_" +
-                            getPreviousValueAndAddOne(mPreviousCounterValue) + ".jpg");
+                            getPreviousValueAndAddOne(mPreviousCounterValue) + "_" + Helpers.getTimeStamp() + ".jpg");
                     Uri uriSavedImage = Uri.fromFile(image1);
                     sFileSavedImage = image1;
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
