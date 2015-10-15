@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Menu actionBarMenu;
     private EditText employeeEditText;
     private CheckBox employeeCheckBox;
-    private static String sTextFromEmployeeEdidText;
     private String employeeNumber;
     private boolean newSession = false;
 
