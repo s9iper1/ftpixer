@@ -34,6 +34,9 @@
         android:layout_below="@+id/layout_top"
         android:id="@+id/scan_button"
         android:text="Scan Barcode"
+        android:background="@drawable/button_theme"
+        android:textColor="@android:color/background_light"
+        android:textStyle="bold"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
     <RadioGroup
