@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         employeeEditText = (EditText) findViewById(R.id.employee_edittext);
         employeeCheckBox = (CheckBox) findViewById(R.id.checkbox_supplementary_work);
         scannerEditText.setFocusable(false);
-        System.out.println("on create called");
         scannerEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -230,9 +229,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }
                     int counter = arrayList.size();
+                    String folderName = null;
+                    if (!scannerEditText.getText().toString().isEmpty()) {
+                        folderName = scannerEditText.getText().toString();
+                    }
+                    System.out.println(folderName);
                     createNextFolder = new File(Environment.getExternalStorageDirectory(),
                             File.separator + "Android/data" + File.separator + getPackageName() +
-                                    File.separator + ("Session_" + (counter + 1)+"_" + Helpers.getTimeStamp()));
+                                    File.separator + (folderName+"_" + Helpers.getTimeStamp()));
                     createNextFolder.mkdirs();
                     AppGlobals.setCurrentPath(createNextFolder);
                     newSession = false;
