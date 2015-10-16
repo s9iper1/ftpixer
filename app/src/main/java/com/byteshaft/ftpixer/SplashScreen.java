@@ -53,6 +53,7 @@ public class SplashScreen extends AppCompatActivity implements View.OnClickListe
     public void openAskPasswordDialog() {
         dialog2 = new Dialog(SplashScreen.this);
         dialog2.setContentView(R.layout.custom_layout2);
+        dialog2.setTitle("Enter Password");
         dialog2.show();
         okPasswordButton = (Button) dialog2.findViewById(R.id.button_ok_password_entry);
         passwordEditText = (EditText) dialog2.findViewById(R.id.ask_password_edit_text);

@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -98,7 +97,7 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
     public void openPasswordDialog() {
         dialog = new Dialog(SetUpDetails.this);
         dialog.setContentView(R.layout.custom_dialog);
-        dialog.setTitle("Password");
+        dialog.setTitle("Set password");
         dialog.show();
     }
 
