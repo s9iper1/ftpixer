@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="260dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Password"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="5dp"/>
+
+    <EditText
+        android:id="@+id/ask_password_edit_text"
+        android:layout_width="160dp"
+        android:inputType="textPassword"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:maxLength="12"
+        android:background="@android:drawable/edit_text"/>
+
+    <Button
+        android:id="@+id/button_ok_password_entry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="OK"
+        android:layout_gravity="center"/>
+
+</LinearLayout>

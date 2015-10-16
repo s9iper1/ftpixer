@@ -1,6 +1,7 @@
 package com.byteshaft.ftpixer;
 
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -10,8 +11,13 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -40,12 +46,20 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
     private CheckBox mSaveServerSetting;
     private SharedPreferences preferences;
     private static final int PICK_IMAGE = 100;
+    Button cancelButton;
+    Button okButton;
+    Dialog dialog;
+    String password;
+    Dialog dialog2;
+    static boolean isPasswordSet = false;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0453A2")));
         setContentView(R.layout.setup);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SetUpDetails.this);
         setTitle("Settings");
         preferences = AppGlobals.getPreferenceManager();
         mSaveServerSetting = (CheckBox) findViewById(R.id.save_settings);
@@ -79,6 +93,48 @@ public class SetUpDetails extends AppCompatActivity implements View.OnClickListe
         } else {
             mSaveServerSetting.setChecked(false);
         }
+    }
+
+    public void openPasswordDialog() {
+        dialog = new Dialog(SetUpDetails.this);
+        dialog.setContentView(R.layout.custom_dialog);
+        dialog.setTitle("Password");
+        dialog.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.setup_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_lock:
+                openPasswordDialog();
+                cancelButton = (Button) dialog.findViewById(R.id.button_dialog_cancel);
+                cancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                okButton = (Button) dialog.findViewById(R.id.button_dialog_ok);
+                okButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        EditText passwordEditText = (EditText) dialog.findViewById(R.id.pass_edit_text);
+                        String passwordOne = passwordEditText.getText().toString().trim();
+                        sharedPreferences.edit().putString("password_one", passwordOne).apply();
+                    }
+                });
+                isPasswordSet = true;
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

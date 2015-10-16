@@ -114,7 +114,7 @@
         android:id="@+id/data_usage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:gravity="left"
         android:text="Data Usage"
         android:textSize="20sp"
         android:layout_margin="10dp"
@@ -125,10 +125,10 @@
 
         <RadioGroup
             android:id="@+id/data_uage_radiogroup"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="2dp"
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:gravity="center"
+            android:gravity="left"
             android:layout_height="wrap_content"
             android:layout_below="@id/data_usage">
 
@@ -165,7 +165,9 @@
         android:text="Save Settings"
         android:textSize="16sp"
         android:layout_above="@+id/button_continue"
+        android:layout_alignParentLeft="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginLeft="2dp"
         android:layout_marginBottom="25dp" />
 
 </RelativeLayout>
