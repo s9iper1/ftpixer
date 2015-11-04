@@ -350,6 +350,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 sImageNameAccordingToRadioButton = "MEX";
                 System.out.println(sImageNameAccordingToRadioButton);
                 break;
+            case R.id.radio_pre_inspection:
+                sImageNameAccordingToRadioButton = "API";
+                System.out.println(sImageNameAccordingToRadioButton);
+                break;
+            case R.id.radio_courtesy_car:
+                sImageNameAccordingToRadioButton = "ACC";
+                System.out.println(sImageNameAccordingToRadioButton);
+
         }
     }
 
