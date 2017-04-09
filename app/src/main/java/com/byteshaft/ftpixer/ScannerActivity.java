@@ -3,23 +3,18 @@ package com.byteshaft.ftpixer;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
-import android.os.Handler;
 import android.os.Bundle;
-import android.text.InputFilter;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import net.sourceforge.zbar.Config;
 import net.sourceforge.zbar.Image;
 import net.sourceforge.zbar.ImageScanner;
 import net.sourceforge.zbar.Symbol;
 import net.sourceforge.zbar.SymbolSet;
-
-import android.support.v7.app.AppCompatActivity;
 
 
 public class ScannerActivity extends Activity {

@@ -1,13 +1,19 @@
 package com.byteshaft.ftpixer;
 
-    import android.app.Activity;
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -51,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CheckBox employeeCheckBox;
     private String employeeNumber;
     private boolean newSession = false;
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
+    private static final int MY_PERMISSIONS_REQUEST_STORAGE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // as you specify a parent activity in AndroidManifest.provider_paths.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -206,11 +214,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.scan_button:
-                Intent intent = new Intent(MainActivity.this, ScannerActivity.class);
-                startActivity(intent);
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.CAMERA},
+                            MY_PERMISSIONS_REQUEST_CAMERA);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, ScannerActivity.class);
+                    startActivity(intent);
+                }
                 radioGroup.clearCheck();
                 break;
             case R.id.pic_button:
+               if (ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED &&
+                        ContextCompat.checkSelfPermission(MainActivity.this,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    Manifest.permission.CAMERA},
+                            MY_PERMISSIONS_REQUEST_STORAGE);
+                    break;
+
+                }else if (ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            MY_PERMISSIONS_REQUEST_STORAGE);
+                    break;
+                } else if (ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.CAMERA,
+                                    Manifest.permission.CAMERA},
+                            MY_PERMISSIONS_REQUEST_STORAGE);
+                    break;
+                }
                 mPreviousCounterValue = Helpers.getPreviousCounterValue();
                 File createNextFolder;
                 ArrayList<File> arrayList = new ArrayList<>();
@@ -241,24 +285,75 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     newSession = false;
                 }
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 sTextFromScannerEditText = scannerEditText.getText().toString();
                 if (employeeCheckBox.isChecked()) {
                     File image = new File(AppGlobals.getCurrentPath(),  sTextFromScannerEditText + "_" + employeeNumber + "_" + "S" + "_" +  sImageNameAccordingToRadioButton
                             +  "_" + "_" +
                             getPreviousValueAndAddOne(mPreviousCounterValue) +  "_" + Helpers.getTimeStamp() + ".jpg");
-                    Uri uriSavedImage = Uri.fromFile(image);
+//                    Uri uriSavedImage = Uri.fromFile(image);
+                    Uri uriSavedImage = FileProvider.getUriForFile(getApplicationContext(),
+                            getApplicationContext().getPackageName() + ".provider", image);
                     sFileSavedImage = image;
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
                 } else {
                     File image1 = new File(AppGlobals.getCurrentPath(),  sTextFromScannerEditText + "_" + employeeNumber + "_" + "N" + "_" +  sImageNameAccordingToRadioButton
                             + "_" + Helpers.getTimeStamp() + "_" +
                             getPreviousValueAndAddOne(mPreviousCounterValue) + "_" + Helpers.getTimeStamp() + ".jpg");
-                    Uri uriSavedImage = Uri.fromFile(image1);
+                    Uri uriSavedImage = FileProvider.getUriForFile(getApplicationContext(),
+                            getApplicationContext().getPackageName() + ".provider", image1);
                     sFileSavedImage = image1;
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
                 }
                 startActivityForResult(cameraIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
                 break;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(MainActivity.this, "permission granted!", Toast.LENGTH_SHORT).show();
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    Intent intent = new Intent(MainActivity.this, ScannerActivity.class);
+                    startActivity(intent);
+
+                } else {
+                    Toast.makeText(MainActivity.this, "permission denied!", Toast.LENGTH_SHORT).show();
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            case MY_PERMISSIONS_REQUEST_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (grantResults.length == 2) {
+                         boolean permission  = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        if (permission) {
+                            Toast.makeText(MainActivity.this, "permission granted!", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(MainActivity.this, "permission granted!", Toast.LENGTH_SHORT).show();
+                    }
+
+                } else {
+                    Toast.makeText(MainActivity.this, "permission denied!", Toast.LENGTH_SHORT).show();
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
         }
     }
 
