@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 
@@ -78,11 +79,11 @@ public class SplashScreen extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.continue_button:
-//                if (!AppGlobals.getSettingState()) {
-//                    Toast.makeText(getApplicationContext(),
-//                            "Cannot proceed, you have to setup first", Toast.LENGTH_LONG).show();
-//                    return;
-//                }
+                if (!AppGlobals.getSettingState()) {
+                    Toast.makeText(getApplicationContext(),
+                            "Cannot proceed, you have to setup first", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 Intent mainActivity = new Intent(SplashScreen.this, MainActivity.class);
                 startActivity(mainActivity);
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
