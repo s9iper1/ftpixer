@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     System.out.println(folderName);
                     createNextFolder = new File(Environment.getExternalStorageDirectory(),
                             File.separator + "Android/data" + File.separator + getPackageName() +
-                                    File.separator + (folderName+"_" + Helpers.getTimeStamp()));
+                                    File.separator + (scannerEditText.getText().toString()));
                     createNextFolder.mkdirs();
                     AppGlobals.setCurrentPath(createNextFolder);
                     newSession = false;
